@@ -1,7 +1,9 @@
 import instascrape as ig
-import json
+import json, csv
 
 raw_data = open("raw_data_instagram.json", "w")
+cleaned_data = open("cleaned_data_instagram.csv", "w")
+cleaned_data_writer = csv.writer(cleaned_data, delimiter=',')
 
 handles = ['instagram', 'carnegiemellon', 'iris_rover']
 handles = ['carnegiemellon', 'iris_rover']
@@ -19,7 +21,7 @@ for handle in handles:
         json.dump(post.json_dict, raw_data, indent=2)
 
 
-        print(post.json_dict['__typename'])
+        #print(post.json_dict['__typename'])
         if post.json_dict['__typename'] == 'GraphImage':
 
             datetime = post.upload_date.strftime("%Y-%m-%d:%Hh%Mm")
@@ -27,9 +29,13 @@ for handle in handles:
 
             id = post.json_dict['id']
             display_url = post.json_dict['display_url']
-            caption = post.json_dict['edge_media_to_caption']
+            caption = post.json_dict['edge_media_to_caption']['edges'][0]['node']
             thumbnail = post.json_dict['thumbnail_resources'][0]['src']
 
+    
+            #cleaned_data
+
+            cleaned_data_writer.writerow([id, handle, datetime, display_url, caption])
 
             i += 1
             if i > 5:
@@ -38,6 +44,7 @@ for handle in handles:
 
 
 raw_data.close()
+cleaned_data.close()
 
 
 """
