@@ -15,6 +15,7 @@ fieldnames = ['application id', 'association', 'link']
 writer = csv.writer(merged_images)
 writer.writerow(fieldnames)
 
+
 for post in instagram.iterrows():
     post = post[1]
     id = 'ig' + str(post[0])
@@ -39,5 +40,15 @@ for post in weheartit.iterrows():
     link = post['URLs']
     writer.writerow([id, author, link])
     i += 1
+
+for id, post in linkedin.iterrows():
+    id = 'li' + str(id)
+    author = post[1][4:-5]
+    try:    #skip non image posts
+        link = post[0][2:-2]
+    except:
+        continue
+
+    writer.writerow([id, author, link])
 
 merged_images.close()
