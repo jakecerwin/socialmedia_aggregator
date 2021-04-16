@@ -28,7 +28,7 @@ for handle in handles:
 
             id = post.json_dict['id']
             display_url = post.json_dict['display_url']
-            caption = post.json_dict['edge_media_to_caption']['edges'][0]['node']['text']
+            caption = post.json_dict['edge_media_to_caption']['edges'][0]['node']
             thumbnail = post.json_dict['thumbnail_resources'][0]['src']
 
     
