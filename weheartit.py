@@ -89,14 +89,14 @@ def persist_image(folder_path:str,url:str):
 
 #write csv header        
 def write_csv_header():
-    with open("images_csv.csv", "w+") as csv_file:
+    with open("data/cleaned_weheartit.csv", "w+") as csv_file:
         fieldnames = ['URLs']
         writer = DictWriter(csv_file, fieldnames=fieldnames)
         writer.writeheader()
 
 #write urls to csv        
 def write_csv(urls):
-    with open("images_csv.csv", "a+") as csv_file:
+    with open("data/cleaned_weheartit.csv", "a+") as csv_file:
         fieldnames = ['URLs']
         writer = DictWriter(csv_file, fieldnames=fieldnames)
         #writer.writeheader()
@@ -117,7 +117,7 @@ def search_and_download(search_term:str,target_path='./images',number_images=5):
         persist_image(target_folder,elem)
         
     #raw data into json file
-    with open('images_json.json', 'w') as outfile:
+    with open('data/raw_weheartit.json', 'w') as outfile:
         json.dump(tuple(res), outfile)
         
         
