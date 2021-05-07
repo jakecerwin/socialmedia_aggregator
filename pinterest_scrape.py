@@ -1,9 +1,7 @@
+
 #!/usr/bin/env python
 # coding: utf-8
 
-# need to install these first, and also download webdriver(chrome)
-# pip install selenium
-# pip install webdriver_manager
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -11,6 +9,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup
 import time
 import csv
+import pandas as pd
 
 #instantiate the Chrome class web driver and pass the Chrome Driver Manager
 driver = webdriver.Chrome(ChromeDriverManager().install())
@@ -38,15 +37,13 @@ driver.find_element_by_xpath('//*[@id="__PWS_ROOT__"]/div[1]/div/div/div[3]/div/
 # scrape data!
 #driver.get("https://www.pinterest.com/")
 
-#raw_data = open("data/raw_pinterest.txt", "w")
 images = []
+content = []
 
 # get five scrolls of data
 for _ in range(1,5):
     soup = BeautifulSoup(driver.page_source,'html.parser')
-    with open('data/raw_pinterest.html', 'w', encoding='utf-8') as f_out:
-        f_out.write(soup.prettify())
-
+    
 
     # get the image from div with pinrep-image test-id
     for img in soup.find_all('div', {"data-test-id":"pinrep-image"}):
@@ -56,27 +53,18 @@ for _ in range(1,5):
         if target is not None:
             str = target.get('src')
             images.append(f'{str}')
+    
+    # get the image from div with pinrep-image test-id
+    for con in soup.find_all('div', {"class":"tBJ dyH iFc MF7 pBj DrD mWe"}):
+        tar = con.get_text()
+        content.append(tar)
 
     # scroll down
     driver.execute_script("window.scrollTo(1,100000)")
     time.sleep(1)
 
-print(images)
+# print(content)
 
-import pandas as pd
-
-df = pd.DataFrame(images, columns=['pin_url'])
-df['user'] = user
-df['id'] = df.index
-df['cat'] = 'pinterest'
-df.head()
-
-df.to_csv('data/cleaned_pinterest.csv', index=False)
-
-driver.quit()
-
-
-# write to file (ignore, the old way)
-#with open ('pinterest_img.txt', 'w', encoding = 'utf-8') as pin_img:
-#    pin_img.writelines(lines for lines in images)
-
+data = {'Image url': pd.Series(images),'Content':pd.Series(content)}
+df = pd.DataFrame(data)
+df.dropna(subset = ["Image url"], inplace=True)
