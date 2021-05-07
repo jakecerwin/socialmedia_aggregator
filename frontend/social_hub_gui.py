@@ -5,9 +5,9 @@ Created on Thu May  6 14:38:18 2021
 """
 
 import tkinter as tk
-from frontend/landing_page_gui import LandingPage
-from frontend/main_page_gui import MainPage
-import frontend/gui_controller as gc
+from frontend.landing_page_gui import LandingPage
+from frontend.main_page_gui import MainPage
+import frontend.gui_controller as gc
 
 
 class SocialHubApp(tk.Frame):

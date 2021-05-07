@@ -6,10 +6,11 @@ Created on Thu May  6 13:25:07 2021
 
 import tkinter as tk
 from PIL import ImageTk, Image
-from frontend/main_page_gui import MainPage
-import frontend/gui_controller as gc
+from frontend.main_page_gui import MainPage
+import frontend.gui_controller as gc
 
 LARGEFONT = ("Verdana", 35)
+idir = 'frontend/images/'
 
 
 class LandingPage(tk.Frame):
@@ -45,7 +46,7 @@ class TitleFrame(tk.Frame):
     def __init__(self, parent):
         tk.Frame.__init__(self, parent, width=400, height=200, bg='#3e433f')
 
-        with Image.open('brand_logo.PNG') as img:
+        with Image.open(idir+'brand_logo.PNG') as img:
             self.profile_img = ImageTk.PhotoImage(img.resize((400, 200), Image.ANTIALIAS))
 
         self.profile_img_label = tk.Label(self, image=self.profile_img, width=400, height=200, bg='#3e433f')

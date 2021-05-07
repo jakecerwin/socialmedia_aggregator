@@ -8,7 +8,7 @@ import tkinter as tk
 from PIL import ImageTk, Image
 import io
 import requests
-import frontend/gui_controller as gc
+import frontend.gui_controller as gc
 # import messagebox from tkinter module
 import tkinter.messagebox
 

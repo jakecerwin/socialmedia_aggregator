@@ -2,7 +2,7 @@ import instascrape as ig
 import pandas as pd
 
 
-class InstagramScraper:
+class InstagramScrapper:
     def __init__(self, following):
         self.following = set()
         self.max_depth = 25

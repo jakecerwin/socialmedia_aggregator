@@ -8,7 +8,8 @@ import time
 import tkinter as tk
 
 #import frontend
-from frontend/social_hub_gui import SocialHubApp
+from frontend.social_hub_gui import SocialHubApp
+import frontend.gui_controller as gc
 
 
 
