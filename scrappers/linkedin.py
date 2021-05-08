@@ -47,45 +47,67 @@ class LinkedinScrapper:
         return None
 
     def scrape(self):
-        for _ in range(1, 20):
+        for _ in range(1, 5):
             src = self.driver.page_source
             soup = BeautifulSoup(src, "lxml")
 
-            content = soup.findAll('span', attrs={'class': 'break-words'}) + soup.findAll('article', attrs={
-                'class': 'feed-shared-announcement__description-container'})
-            contents = []
-            for i in content:
-                c = i.get_text()
-                contents.append({c})
+            #finding content
+            try:
+                content = soup.findAll('span', attrs = {'class':'break-words'})
+                contents = []
+                for i in content:
+                    c = i.get_text()
+                    contents.append({c})
+            except KeyError:
+                continue
+            except TypeError:
+                continue
+            except ValueError:
+                continue
 
-            # Gini pls fix this
-            personal_image = soup.findAll('img', attrs={'class':
-                'presence-entity__image ivm-view-attr__img--centered EntityPhoto-circle-3 feed-shared-actor__avatar-image EntityPhoto-circle-3 lazy-image ember-view'})
-            personal_images = []
-            names = []
-
-            for i in personal_image:
-                # print(i['src'])
-                d = i['src']
-                e = i['title']
-                personal_images.append({d})
-                names.append({e})
-
+            #finding image and name
+            try:
+                the_image = soup.findAll('div', attrs={'class': 'feed-shared-actor__avatar ivm-image-view-model ember-view'})
+                images = []
+                names = []
+                for i in the_image:
+                    if i is not None:
+                        image = i.img['src']
+                        name = i.img['alt']
+                        images.append({image})
+                        names.append({name})
+                    else:
+                        continue
+            except KeyError:
+                continue
+            except TypeError:
+                continue
+            except ValueError:
+                continue
+    
+        #finding likes
+        try:
             number_likes = []
-            for i in soup.findAll('span',
-                                  attrs={'class': 'v-align-middle social-details-social-counts__reactions-count'}):
+            for i in soup.findAll('span', attrs={'class': 'v-align-middle social-details-social-counts__reactions-count'}):
                 e = i.get_text()
                 number_likes.append({e})
-            self.driver.execute_script("window.scrollTo(1,100000)")
-            time.sleep(2)
+        except KeyError:
+            continue
+        except TypeError:
+            continue
+        except ValueError:
+            continue
+    
+        self.driver.execute_script("window.scrollTo(1,100000)")
+        time.sleep(2)
 
-        data = {'User Image url': pd.Series(personal_images), 'Name': pd.Series(names),
+      data = {'User Image url': pd.Series(personal_images), 'Name': pd.Series(names),
                 'Post Content': pd.Series(contents), 'Likes': pd.Series(number_likes)}
-        df = pd.DataFrame(data)
+      df = pd.DataFrame(data)
 
-        df.dropna(subset=["User Image url"], inplace=True)
+      df.dropna(subset=["User Image url"], inplace=True)
 
-        return df
+       return df
 
     def close(self):
         self.driver.quit()
