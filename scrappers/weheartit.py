@@ -137,11 +137,13 @@ class weheartitScrapper:
         print(res)
 
         #uncomment to download images
-        '''print('\n\nDowloading images.......\n\n')
+        """
+        print('\n\nDowloading images.......\n\n')
         time.sleep(3)
         #download scraped images
         for elem in list(res.Urls.values):
-            persist_image(target_folder,elem)'''
+            self.persist_image(target_folder,elem)
+        """
 
         #data in csv
         return res
