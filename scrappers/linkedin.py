@@ -29,6 +29,7 @@ class LinkedinScrapper:
         self.user = username
         self.password = password
 
+
         # login to account before starting to scrape
         elementID = self.driver.find_element_by_id('username')
         elementID.send_keys(username)
@@ -57,12 +58,8 @@ class LinkedinScrapper:
                 for i in content:
                     c = i.get_text()
                     contents.append({c})
-            except KeyError:
-                continue
-            except TypeError:
-                continue
-            except ValueError:
-                continue
+            except:
+                contents = []
 
             # finding image and name
             try:
@@ -78,7 +75,7 @@ class LinkedinScrapper:
                         names.append({name})
                     else:
                         continue
-            except :
+            except:
                 images = []
                 names = []
 
@@ -93,11 +90,8 @@ class LinkedinScrapper:
             images = []
             names = []
 
-
         self.driver.execute_script("window.scrollTo(1,100000)")
         time.sleep(2)
-
-
 
         data = {'User Image url': pd.Series(images), 'Name': pd.Series(names),
                 'Post Content': pd.Series(contents), 'Likes': pd.Series(number_likes)}
@@ -105,7 +99,6 @@ class LinkedinScrapper:
 
         df.dropna(subset=["User Image url"], inplace=True)
         return df
-
 
     def close(self):
         self.driver.quit()

@@ -23,7 +23,7 @@ def display_likes(platform_name):
     pass
 
 
-def read_img(): # will replace on backend to negate csv reliance
+def read_static(): # will replace on backend to negate csv reliance
     img_urls = pd.DataFrame(columns=['Urls', 'User', 'Likes'])
     i = 0
     with open('cleaned_pinterest.csv', 'rt', encoding='utf-8') as f:
@@ -43,6 +43,10 @@ def read_img(): # will replace on backend to negate csv reliance
             img_urls.loc[i] = [l.split(',')[0], l.split(',')[1], l.split(',')[2].rstrip()]
             i += 1
     return img_urls
+
+
+def read_imgs(df_dict):
+    return None
 
 
 # send user_name and password

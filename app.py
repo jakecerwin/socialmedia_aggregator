@@ -16,11 +16,14 @@ import frontend.gui_controller as gc
 # import backend
 from scrappers.pinterest import PinterestScrapper
 from scrappers.linkedin import LinkedinScrapper
-from scrappers.instagram import InstagramScrapper
-#from scrappers.weheartit
+#from scrappers.instagram import InstagramScrapper
+#from scrappers.weheartit import WeheartitScrapper
+
 
 
 # Interface for image objects will be a queue (list) of
+
+static = True
 
 
 
@@ -33,13 +36,21 @@ passwordPinterest = 'datafocusedpythOn'
 usernameLinkedIn  = 'jake.cerwin@yahoo.com'
 passwordLinkedIn  = '1800317'
 
-""""
+
 linkedin = LinkedinScrapper(usernameLinkedIn, passwordLinkedIn)
-time.sleep(5)
-df = linkedin.scrape()
-breakpoint()
+pinterest = PinterestScrapper(usernamePinterest, passwordPinterest)
+
+df_linkedin = linkedin.scrape()
+df_pinterest = pinterest.scrape()
+
+
+
+df_pinterest.to_csv('data/pinterest.csv', index=False)
+df_linkedin.to_csv('data/linkedin.csv', index=False)
+
 linkedin.close()
-"""
+pinterest.close()
+
 """
 pinterest = PinterestScrapper(username, password)
 df = pinterest.scrape()
@@ -47,9 +58,7 @@ pinterest.refresh()
 df = pinterest.scrape()
 pinterest.close()
 """
-
-
-
+"""
 root = tk.Tk()
 root.title("SocialHub1.0")
 root.geometry('800x500')
@@ -66,3 +75,4 @@ menu.add_cascade(label='File', menu=item)
 root.config(menu=menu)
 SocialHubApp(root).pack(side="top", fill="both", expand=True)
 root.mainloop()
+"""

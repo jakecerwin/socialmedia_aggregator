@@ -11,12 +11,14 @@ from bs4 import BeautifulSoup
 import time
 import pandas as pd
 
+debug = False
 
 class PinterestScrapper:
 
     def __init__(self, username, password):
         options = webdriver.ChromeOptions()
-        options.headless = True
+        options.headless = not debug
+
         self.driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
 
         # Maximize the Chrome window to full-screen
@@ -39,11 +41,15 @@ class PinterestScrapper:
         self.driver.find_element_by_xpath(
             '//*[@id="__PWS_ROOT__"]/div[1]/div/div/div[3]/div/div/div[3]/form/div[5]/button').click()
 
+        self.scraped = set()
+        self.scraped_count = 0
         return None
 
     def scrape(self):
         # raw_data = open("data/raw_pinterest.txt", "w")
         images = []
+        ids = []
+        fmt = ""
 
         # get five scrolls of data
         for _ in range(1, 5):
@@ -54,18 +60,33 @@ class PinterestScrapper:
 
                 target = img.find('img')
                 if target is not None:
-                    str = target.get('src')
-                    images.append(f'{str}')
+                    image_str = target.get('src')
+
+                    # prevent duplicates
+                    if image_str in self.scraped:
+                        continue
+                    else:
+                        self.scraped.add(image_str)
+
+                    images.append(image_str)
+                    self.scraped_count += 1
+                    id = 'pt'+ str(self.scraped_count).zfill(8)
+                    ids.append(id)
+
+                    breakpoint()
+
+
+
+
+
+
 
             # scroll down
             self.driver.execute_script("window.scrollTo(1,100000)")
             time.sleep(1)
 
-        df = pd.DataFrame(images, columns=['pin_url'])
-        df['user'] = self.user
-        df['id'] = df.index
-        df['cat'] = 'pinterest'
-        df.head()
+        data = {'images': pd.Series(images), 'ids': pd.Series(ids), }
+        df = pd.DataFrame(data)
 
         # df.to_csv('data/cleaned_pinterest.csv', index=False)
 
@@ -99,64 +120,3 @@ if __name__ == "__main__":
     print(df.head())
 
 
-"""
-def scrape_pinterest():
-    # instantiate the Chrome class web driver and pass the Chrome Driver Manager
-    options = webdriver.ChromeOptions()
-    options.headless = True
-    driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
-
-    # Maximize the Chrome window to full-screen
-    # driver.minimize_window()
-
-    # go to Pinterest's Login page
-    driver.get("https://www.pinterest.com/login/")
-
-    user = 'jake.cerwin@yahoo.com'
-    password = 'datafocusedpythOn'
-
-    # login to account before starting to scrape
-    # email
-    driver.find_element_by_xpath('//*[@id="email"]').send_keys(user)
-
-    # password
-    driver.find_element_by_xpath('//*[@id="password"]').send_keys(password)
-
-    # click login button
-    driver.find_element_by_xpath(
-        '//*[@id="__PWS_ROOT__"]/div[1]/div/div/div[3]/div/div/div[3]/form/div[5]/button').click()
-
-    # scrape data!
-    # driver.get("https://www.pinterest.com/")
-
-    # raw_data = open("data/raw_pinterest.txt", "w")
-    images = []
-
-    # get five scrolls of data
-    for _ in range(1, 5):
-        soup = BeautifulSoup(driver.page_source, 'html.parser')
-        with open('raw_pinterest.html', 'w', encoding='utf-8') as f_out:
-            f_out.write(soup.prettify())
-
-        # get the image from div with pinrep-image test-id
-        for img in soup.find_all('div', {"data-test-id": "pinrep-image"}):
-
-            target = img.find('img')
-            if target is not None:
-                str = target.get('src')
-                images.append(f'{str}')
-
-        # scroll down
-        driver.execute_script("window.scrollTo(1,100000)")
-        time.sleep(1)
-
-    df = pd.DataFrame(images, columns=['pin_url'])
-    df['user'] = user
-    df['id'] = df.index
-    df['cat'] = 'pinterest'
-    df.head()
-
-    # df.to_csv('data/cleaned_pinterest.csv', index=False)
-    driver.quit()
-    return df
-"""

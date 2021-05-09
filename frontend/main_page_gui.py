@@ -11,6 +11,7 @@ import requests
 import frontend.gui_controller as gc
 # import messagebox from tkinter module
 import tkinter.messagebox
+idir = 'frontend/images/'
 
 
 class MainPage(tk.Frame):
@@ -44,7 +45,7 @@ class LeftFrame(tk.Frame):
         self.left_upper.pack(side='top', fill='both')
 
         # profile img
-        with Image.open("IMG_1670.JPG") as img:
+        with Image.open(idir+"placeholder1.png") as img:
             self.profile_img = ImageTk.PhotoImage(img.resize((60, 60), Image.ANTIALIAS))
 
         self.profile_img_label = tk.Label(self.left_upper, image=self.profile_img, width=60, height=60)
@@ -108,7 +109,7 @@ class RightFrame(tk.Frame):
 
         parent.img_ls = []
         # populate the frame
-        df = gc.read_img()
+        df = gc.read_static()
         df_shuffled = df.sample(frac=1).reset_index(drop=True)
         print(df)
         for ind in df.index:
