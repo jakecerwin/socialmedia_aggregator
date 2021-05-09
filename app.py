@@ -19,6 +19,14 @@ from scrappers.linkedin import LinkedinScrapper
 from scrappers.instagram import InstagramScrapper
 #from scrappers.weheartit
 
+
+# Interface for image objects will be a queue (list) of
+
+
+
+
+
+
 usernamePinterest = 'jake.cerwin@yahoo.com'
 passwordPinterest = 'datafocusedpythOn'
 

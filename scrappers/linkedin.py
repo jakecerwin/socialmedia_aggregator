@@ -60,14 +60,16 @@ class LinkedinScrapper:
 
             # Gini pls fix this
             personal_image = soup.findAll('img', attrs={'class':
-                'presence-entity__image ivm-view-attr__img--centered EntityPhoto-circle-3 feed-shared-actor__avatar-image EntityPhoto-circle-3 lazy-image ember-view'})
+                'lazy-image'})
             personal_images = []
             names = []
 
-            for i in personal_image:
+
+            for image in personal_image:
+                breakpoint()
                 # print(i['src'])
-                d = i['src']
-                e = i['title']
+                src = image.attrs['src']
+                e = image.attrs['title']
                 personal_images.append({d})
                 names.append({e})
 
