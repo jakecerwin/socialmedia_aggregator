@@ -11,8 +11,7 @@ from bs4 import BeautifulSoup
 import time
 import pandas as pd
 
-
-debug = True
+debug = False
 
 
 class LinkedinScrapper:
@@ -23,7 +22,7 @@ class LinkedinScrapper:
         # instantiate the Chrome class web driver and pass the Chrome Driver Manager
         self.driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
 
-        #Maximize the Chrome window to full-screen
+        # Maximize the Chrome window to full-screen
         self.driver.maximize_window()
 
         self.driver.get('https://www.linkedin.com/login/')
@@ -47,47 +46,66 @@ class LinkedinScrapper:
         return None
 
     def scrape(self):
-        for _ in range(1, 20):
+        for _ in range(1, 5):
             src = self.driver.page_source
             soup = BeautifulSoup(src, "lxml")
 
-            content = soup.findAll('span', attrs={'class': 'break-words'}) + soup.findAll('article', attrs={
-                'class': 'feed-shared-announcement__description-container'})
-            contents = []
-            for i in content:
-                c = i.get_text()
-                contents.append({c})
+            # finding content
+            try:
+                content = soup.findAll('span', attrs={'class': 'break-words'})
+                contents = []
+                for i in content:
+                    c = i.get_text()
+                    contents.append({c})
+            except KeyError:
+                continue
+            except TypeError:
+                continue
+            except ValueError:
+                continue
 
-            # Gini pls fix this
-            personal_image = soup.findAll('img', attrs={'class':
-                'lazy-image'})
-            personal_images = []
-            names = []
+            # finding image and name
+            try:
+                the_image = soup.findAll('div',
+                                         attrs={'class': 'feed-shared-actor__avatar ivm-image-view-model ember-view'})
+                images = []
+                names = []
+                for i in the_image:
+                    if i is not None:
+                        image = i.img['src']
+                        name = i.img['alt']
+                        images.append({image})
+                        names.append({name})
+                    else:
+                        continue
+            except :
+                images = []
+                names = []
 
-
-            for image in personal_image:
-                breakpoint()
-                # print(i['src'])
-                src = image.attrs['src']
-                e = image.attrs['title']
-                personal_images.append({d})
-                names.append({e})
-
+        # finding likes
+        try:
             number_likes = []
             for i in soup.findAll('span',
                                   attrs={'class': 'v-align-middle social-details-social-counts__reactions-count'}):
                 e = i.get_text()
                 number_likes.append({e})
-            self.driver.execute_script("window.scrollTo(1,100000)")
-            time.sleep(2)
+        except:
+            images = []
+            names = []
 
-        data = {'User Image url': pd.Series(personal_images), 'Name': pd.Series(names),
+
+        self.driver.execute_script("window.scrollTo(1,100000)")
+        time.sleep(2)
+
+
+
+        data = {'User Image url': pd.Series(images), 'Name': pd.Series(names),
                 'Post Content': pd.Series(contents), 'Likes': pd.Series(number_likes)}
         df = pd.DataFrame(data)
 
         df.dropna(subset=["User Image url"], inplace=True)
-
         return df
+
 
     def close(self):
         self.driver.quit()
@@ -112,7 +130,3 @@ if __name__ == "__main__":
     linkedin.close()
 
     print(df.head())
-
-
-
-
