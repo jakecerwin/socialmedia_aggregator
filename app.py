@@ -12,12 +12,11 @@ from frontend.social_hub_gui import SocialHubApp
 import frontend.gui_controller as gc
 
 
-
 # import backend
 from scrappers.pinterest import PinterestScrapper
 from scrappers.linkedin import LinkedinScrapper
-#from scrappers.instagram import InstagramScrapper
-#from scrappers.weheartit import WeheartitScrapper
+from scrappers.instagram import InstagramScrapper
+from scrappers.weheartit import WeheartitScrapper
 
 
 
@@ -37,19 +36,32 @@ usernameLinkedIn  = 'jake.cerwin@yahoo.com'
 passwordLinkedIn  = '1800317'
 
 
+instagram_followers = ['carnegiemellon', 'iris_rover', 'mse_cmu']
+weheartit_searches = ['tech', 'travel']
+
+
+# create scrappers
 linkedin = LinkedinScrapper(usernameLinkedIn, passwordLinkedIn)
 pinterest = PinterestScrapper(usernamePinterest, passwordPinterest)
+instagram = InstagramScrapper(instagram_followers)
+weheartit = WeheartitScrapper(weheartit_searches)
 
+#scrape
 df_linkedin = linkedin.scrape()
 df_pinterest = pinterest.scrape()
+df_instagram = instagram.scrape()
+df_weheartit = weheartit.scrape()
 
-
-
+# save
 df_pinterest.to_csv('data/pinterest.csv', index=False)
 df_linkedin.to_csv('data/linkedin.csv', index=False)
+df_instagram.to_csv('data/instagram.csv', index=False)
+df_weheartit.to_csv('data/weheartit.csv', index=False)
 
 linkedin.close()
 pinterest.close()
+weheartit.close()
+instagram.close()
 
 """
 pinterest = PinterestScrapper(username, password)

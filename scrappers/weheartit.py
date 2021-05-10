@@ -9,13 +9,11 @@ from PIL import Image
 import requests, io, hashlib, os
 import pandas as pd
 
-debug = True
-
-class weheartitScrapper:
-    def __init__(self):
+class WeheartitScrapper:
+    def __init__(self, terms, debug=False):
         options = webdriver.ChromeOptions()
         options.headless = not debug
-
+        self.terms = terms
         self.driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
         self.seen = set()
 
@@ -87,13 +85,14 @@ class weheartitScrapper:
                         #df.loc[len(df.index)]=[actual_image.get_attribute('src'),user.get_attribute('innerText'),heart_count.get_attribute('innerText')]
 
                 image_count = len(image_urls)
-
+                """
                 if len(image_urls) >= max_links_to_fetch:
                     print(f"Found: {len(image_urls)} image links, done!\n\nImage details:\n")
                     time.sleep(5)
                     break
+                """
             else:
-                print("Found:", len(image_urls), "image links, looking for more ...")
+                #print("Found:", len(image_urls), "image links, looking for more ...")
                 time.sleep(30)
                 return
                 load_more_button = self.driver.find_element_by_css_selector(".mye4qd")
@@ -134,7 +133,7 @@ class weheartitScrapper:
 
         #with self.driver as self.driver:
         res = self.fetch_image_urls(search_term, number_images, sleep_between_interactions=0.5)
-        print(res)
+        #print(res)
 
         #uncomment to download images
         """
@@ -148,10 +147,10 @@ class weheartitScrapper:
         #data in csv
         return res
 
-    def scrape(self, terms):
+    def scrape(self):
         #search term
         df = None
-        for term in terms:
+        for term in self.terms:
             if df is None:
                 df = self.search_and_download(term)
             else:
@@ -160,11 +159,15 @@ class weheartitScrapper:
 
         return df
 
+    def edit_terms(self, terms):
+        self.terms = terms
+        return None
+
     def close(self):
         self.driver.quit()
 
 if __name__ == "__main__":
-    weheartit = weheartitScrapper()
-    df = weheartit.scrape(['houseplants', 'trucks'])
+    weheartit = WeheartitScrapper(['houseplants', 'trucks'], True)
+    df = weheartit.scrape()
     weheartit.close()
     print(df.head())

@@ -4,94 +4,67 @@ import pandas as pd
 
 class InstagramScrapper:
     def __init__(self, following):
-        self.following = set()
+
+        self.following = following
         self.max_depth = 25
-        self.columns = ['postid','author','datetime','likes', 'imagelink','caption']
+        self.columns = ['postid','likes', 'imagelink','caption']
+        self.SESSIONID = '47114138175%3AbgoISOWzPi3O6b%3A7'
+
 
         # keep only nonprivate accounts
+        """
         for handle in following:
             profile = ig.Profile(handle)
             profile.scrape()
             if not profile.is_private:
-                self.following.add(handle)
+                self.following.append(handle)
+        """
 
     def scrape(self):
         df = pd.DataFrame(columns=self.columns)
+
+        SESSIONID = self.SESSIONID
+        headers = {
+            "user-agent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Mobile Safari/537.36 Edg/87.0.664.57",
+            "cookie": f"sessionid={SESSIONID};"}
+
+
         for handle in self.following:
             profile = ig.Profile(handle)
-            profile.scrape()
+            profile.scrape(headers=headers)
+
             profile_posts = profile.get_recent_posts()
             depth = 0
             for post in profile_posts:
+
                 if post.json_dict['__typename'] == 'GraphImage':
                     datetime = post.upload_date.strftime("%Y-%m-%d:%Hh%Mm")
-                    post.download(f"instagram_photos/{handle}{datetime}.png")
+                    #post.download(f"instagram_photos/{handle}{datetime}.png")
 
                     id = post.json_dict['id']
+
                     display_url = post.json_dict['display_url']
                     caption = post.json_dict['edge_media_to_caption']['edges'][0]['node']
                     thumbnail = post.json_dict['thumbnail_resources'][0]['src']
-                    likes = 42 # post.json_dict['likes']
-                    breakpoint()
+                    likes = post.likes # post.json_dict['likes']
 
-                    #
-                    df.append([id, handle, datetime, likes, display_url, caption])
+                    print(likes)
+                    df = df.append({'postid':id,'likes':likes, 'imagelink':display_url,'caption':caption}, ignore_index=True)
+
 
                     depth += 1
                     if depth > self.max_depth:
                         break
 
+        return df
+
+    def close(self):
+        return None
 
 
 
-"""
-#raw_data = open("data/raw_instagram.json", "w")
-#cleaned_data = open("data/cleaned_instagram.csv", "w")
-#cleaned_data_writer = csv.writer(cleaned_data, delimiter=',')
-#cleaned_data_writer.writerow(['postid','author','datetime','imagelink','caption'])
-
-
-
-handles = ['jakecerwin', 'carnegiemellon', 'iris_rover', 'heinzcollege_careersvcs', 'carnegiemellonece']
-# Instantiate the scraper objects
-
-for handle in handles:
-
-    profile = ig.Profile(handle)
-    profile.scrape()
-    profile_posts = profile.get_recent_posts()
-    depth = 0
-    for post in profile_posts:
-
-        json.dump(post.json_dict, raw_data, indent=2)
-
-
-        #print(post.json_dict['__typename'])
-        if post.json_dict['__typename'] == 'GraphImage':
-
-            datetime = post.upload_date.strftime("%Y-%m-%d:%Hh%Mm")
-            post.download(f"instagram_photos/{handle}{datetime}.png")
-
-            id = post.json_dict['id']
-            display_url = post.json_dict['display_url']
-            caption = post.json_dict['edge_media_to_caption']['edges'][0]['node']
-            thumbnail = post.json_dict['thumbnail_resources'][0]['src']
-
-
-
-
-    
-            #cleaned_data
-
-            cleaned_data_writer.writerow([id, handle, datetime, display_url, caption])
-
-            i += 1
-            if i > 5:
-                break
-    
-
-
-raw_data.close()
-cleaned_data.close()
-"""
+if __name__ == "__main__":
+    instagram = InstagramScrapper(['carnegiemellon', 'instagram'])
+    df = instagram.scrape()
+    print(df.head())
 

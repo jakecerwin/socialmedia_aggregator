@@ -73,11 +73,6 @@ class PinterestScrapper:
                     id = 'pt'+ str(self.scraped_count).zfill(8)
                     ids.append(id)
 
-                    breakpoint()
-
-
-
-
 
 
 
