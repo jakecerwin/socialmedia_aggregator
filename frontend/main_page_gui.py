@@ -45,8 +45,10 @@ class LeftFrame(tk.Frame):
         tk.Frame.__init__(self, parent, width=250, height=500, bg='#515151')
 
         # 1.1 profile pannel
+        self.controller = controller
         self.left_upper = tk.Frame(self, width=250, height=130, bg='#515151')
         self.left_upper.pack(side='top', fill='both')
+        self.static = True
 
         # profile img
         with Image.open(idir+"placeholder.png") as img:
@@ -56,11 +58,11 @@ class LeftFrame(tk.Frame):
         self.profile_img_label.place(relx=0.1, rely=0.3)
 
         # profile name and account
-        self.profile_name = tk.Label(self.left_upper, text='Edit Accounts', fg='white', bg='#515151')
-        self.profile_email = tk.Label(self.left_upper, text='email goes here', fg='white', bg='#515151')
-        self.profile_email= tk.Button(self.left_upper, text='click', fg="white", width=25, height=2, bg='#515151',
-                               command=self.load_account_page(controller))
-        self.profile_name.place(relx=0.4, rely=0.3)
+        #self.profile_name = tk.Label(self.left_upper, text='Edit Accounts', fg='white', bg='#515151')
+        #self.profile_email = tk.Label(self.left_upper, text='email goes here', fg='white', bg='#515151')
+        self.profile_email= tk.Button(self.left_upper, text='Edit Accounts', fg="black", width=15, height=2,
+                                      bg='#515151', command=self.load_account_page)
+        #self.profile_name.place(relx=0.4, rely=0.3)
         self.profile_email.place(relx=0.4, rely=0.5)
 
         # 1.2 button pannel
@@ -103,10 +105,12 @@ class LeftFrame(tk.Frame):
         self.b_graph_ins.place(relx=0.09, rely=0)
         self.b_graph_whi.place(relx=0.09, rely=0.41)
 
-    def load_account_page(self, controller):
+    def load_account_page(self):
+        print('account page')
         from frontend.account_page_gui import AccountPage
         #gc.log_in(self.u_name.get(), self.pw.get())
-        controller.show_frame(AccountPage)
+        #print('account page')
+        self.controller.show_frame(AccountPage)
 
     #def refresh():
 
