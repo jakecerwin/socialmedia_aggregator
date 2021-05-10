@@ -24,8 +24,12 @@ from scrappers.weheartit import WeheartitScrapper
 
 static = True
 
-
-
+# Scrapped data format
+# postid - 2 letter social media prefix followed by 8 digit unique number
+# likes - int
+# category - string
+# link - string image link
+# data- string
 
 
 
