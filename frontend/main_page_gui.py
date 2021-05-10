@@ -12,6 +12,7 @@ import frontend.gui_controller as gc
 # import messagebox from tkinter module
 import tkinter.messagebox
 idir = 'frontend/images/'
+ddir = 'data/graphs/'
 
 
 
@@ -42,7 +43,7 @@ class LeftFrame(tk.Frame):
         tk.Frame.__init__(self, parent, width=250, height=500, bg='#515151')
 
         # 1.1 profile pannel
-        self.left_upper = tk.Frame(self, width=250, height=150, bg='#515151')
+        self.left_upper = tk.Frame(self, width=250, height=130, bg='#515151')
         self.left_upper.pack(side='top', fill='both')
 
         # profile img
@@ -59,8 +60,10 @@ class LeftFrame(tk.Frame):
         self.profile_email.place(relx=0.4, rely=0.5)
 
         # 1.2 button pannel
-        self.left_lower = tk.Frame(self, width=250, height=350, bg='#515151')
+
+        self.left_lower = tk.Frame(self, width=250, height=460, bg='#515151')
         self.left_lower.pack(side='bottom', fill='both')
+        """
         # buttons
         self.b_all = tk.Button(self.left_lower, text='All', fg="black", width=25, height=2, bg='#dadada',
                                command=gc.filter_platform('all', parent.img_ls))
@@ -72,20 +75,29 @@ class LeftFrame(tk.Frame):
                                 command=gc.filter_platform('linkedIn', parent.img_ls))
         self.b_whi = tk.Button(self.left_lower, text='We Heart It', fg="black", width=25, height=2, bg='#dadada',
                                command=gc.filter_platform('weheartit', parent.img_ls))
+        """
 
-        self.b_graph_ins = tk.Button(self.left_lower, text='Instagram\n Like Graph', fg="white", width=10, height=4,
+        with Image.open(ddir+"weheartit.png") as img:
+            self.wh_graph_img = ImageTk.PhotoImage(img.resize((200, 180), Image.ANTIALIAS))
+
+        with Image.open(ddir+"instagram.png") as img:
+            self.ig_graph_img = ImageTk.PhotoImage(img.resize((200, 180), Image.ANTIALIAS))
+
+
+        self.b_graph_ins = tk.Button(self.left_lower, image=self.ig_graph_img, fg="white", width=200, height=180,
                                      bg='#9fbac1', command=gc.display_likes('instagram'))
-        self.b_graph_whi = tk.Button(self.left_lower, text='We Heart It\n Like Graph', fg="White", width=10, height=4,
+        self.b_graph_whi = tk.Button(self.left_lower, image=self.wh_graph_img, fg="White", width=200, height=180,
                                      bg='#9fbac1', command=gc.display_likes('weheartit'))
-
+        """
         self.b_all.place(relx=0.1, rely=0)
         self.b_ins.place(relx=0.1, rely=0.15)
         self.b_pin.place(relx=0.1, rely=0.3)
         self.b_link.place(relx=0.1, rely=0.45)
         self.b_whi.place(relx=0.1, rely=0.6)
+        """
 
-        self.b_graph_ins.place(relx=0.1, rely=0.75)
-        self.b_graph_whi.place(relx=0.5, rely=0.75)
+        self.b_graph_ins.place(relx=0.09, rely=0)
+        self.b_graph_whi.place(relx=0.09, rely=0.41)
 
 
 class RightFrame(tk.Frame):

@@ -56,10 +56,6 @@ def read_static(dir='example_data'): # will replace on backend to negate csv rel
     plt.xticks(rotation=0)
     plt.savefig('data/graphs/weheartit.png')
 
-
-
-
-
     return combined_df
 
 
