@@ -76,12 +76,14 @@ class LinkedinScrapper:
                     if i is not None:
 
                         postid = 'lk' + i.attrs['id'][5:].zfill(8)
+                        if postid in postids:
+                            continue
                         image = i.img['src']
                         name = i.img['alt']
                         images.append(image)
                         names.append(name)
                         postids.append(postid)
-                        breakpoint()
+
 
                     else:
 
@@ -95,7 +97,8 @@ class LinkedinScrapper:
             for i in soup.findAll('span',
                                   attrs={'class': 'v-align-middle social-details-social-counts__reactions-count'}):
                 e = i.get_text()
-                number_likes.append({e})
+                number_likes.append(e)
+
         except:
             print('likes')
 
@@ -114,7 +117,7 @@ class LinkedinScrapper:
         #        'Post Content': pd.Series(contents), 'Likes': pd.Series(number_likes)}
         df = pd.DataFrame(data)
 
-        df.dropna(subset=["User Image url"], inplace=True)
+        df.dropna(subset=["link"], inplace=True)
         return df
 
     def close(self):
@@ -136,14 +139,12 @@ if __name__ == "__main__":
     USERNAME = 'jcerwin@andrew.cmu.edu'
     PASSWORD ='Carmel25!'
 
-    linkedin = LinkedinScrapper(USERNAME, PASSWORD, True)
-    print('waiting')
+    linkedin = LinkedinScrapper(USERNAME, PASSWORD, False)
     time.sleep(5)
-    print('scraping')
     df = linkedin.scrape()
 
     linkedin.close()
     df.to_csv('../data/linkedin.csv')
 
     print(df.head())
-    breakpoint()
+

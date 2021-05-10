@@ -10,12 +10,13 @@ from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup
 import time
 import pandas as pd
+import random
 
 debug = False
 
 class PinterestScrapper:
 
-    def __init__(self, username, password):
+    def __init__(self, username, password, debug=False):
         options = webdriver.ChromeOptions()
         options.headless = not debug
 
@@ -49,6 +50,9 @@ class PinterestScrapper:
         # raw_data = open("data/raw_pinterest.txt", "w")
         images = []
         ids = []
+        categories = []
+        data = []
+        likes = []
         fmt = ""
 
         # get five scrolls of data
@@ -71,16 +75,21 @@ class PinterestScrapper:
                     images.append(image_str)
                     self.scraped_count += 1
                     id = 'pt'+ str(self.scraped_count).zfill(8)
+
                     ids.append(id)
-
-
+                    likes.append(time.time_ns() % 1000) #spoof temporarily
+                    data.append("feed")
+                    categories.append(self.user)
 
 
             # scroll down
             self.driver.execute_script("window.scrollTo(1,100000)")
             time.sleep(1)
 
-        data = {'images': pd.Series(images), 'ids': pd.Series(ids), }
+        data = {'postid': pd.Series(ids), 'likes': pd.Series(likes),
+                'category': pd.Series(categories),
+                'link': pd.Series(images),
+                'data': pd.Series(data)}
         df = pd.DataFrame(data)
 
         # df.to_csv('data/cleaned_pinterest.csv', index=False)

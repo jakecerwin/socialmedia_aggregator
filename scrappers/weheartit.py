@@ -15,10 +15,11 @@ class WeheartitScrapper:
         options.headless = not debug
         self.terms = terms
         self.driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
-        self.seen = set()
+        self.driver.maximize_window()
+        self.seen = 0
 
     #fetch urls of images
-    def fetch_image_urls(self, query:str, max_links_to_fetch:int, sleep_between_interactions:int=1):
+    def fetch_image_urls(self, query, max_links_to_fetch, sleep_between_interactions=1):
         def scroll_to_end():
 
             self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
@@ -33,7 +34,15 @@ class WeheartitScrapper:
         self.driver.get(url)
 
         image_urls = set()
-        df=pd.DataFrame(columns=['Urls','Users','Hearts'])
+        #df=pd.DataFrame(columns=['Urls','Users','Hearts'])
+        df=pd.DataFrame(columns=['postid', 'likes', 'category', 'link', 'data'])
+
+        postids = []
+        likes = []
+        categories = []
+        links = []
+        data = []
+
         image_count = 0
         results_start = 0
         while image_count < max_links_to_fetch:
@@ -49,16 +58,17 @@ class WeheartitScrapper:
 
             for img in thumbnail_results[results_start:number_results]:
                 # try to click every thumbnail to get the image behind it
-                try:
-                    #print('Before img click')
-                    img.click()
-                    #print('After img click')
-                    time.sleep(sleep_between_interactions)
+                if image_count > max_links_to_fetch: break
+                #print('Before img click')
+                #img.click()
+                #print('After img click')
+                #time.sleep(sleep_between_interactions)
 
-                except Exception:
-                    continue
-                self.driver.headless=True
-                time.sleep(5)
+                #except Exception:
+                #    breakpoint()
+                #    continue
+
+                #time.sleep(5)
 
                 # extract image urls, usernames, and heart count
                 actual_images=self.driver.find_elements_by_css_selector("img[alt*='image']")
@@ -79,12 +89,27 @@ class WeheartitScrapper:
                     if actual_image.get_attribute('src') and 'http' in actual_image.get_attribute('src'):
                         image_urls.add(actual_image.get_attribute('src'))
                         #print(actual_image.get_attribute('src'),user.text,heart_count.text)
-
+                        self.seen += 1
+                        image_count +=1
+                        if image_count > max_links_to_fetch: break
+                        postid = 'wh'+ str(self.seen).zfill(8)
                         #add the image url,username and hearts to df
-                        df.loc[len(df.index)]=[actual_image.get_attribute('src'),user.get_attribute('data-hearter-username'),heart_count.get_attribute('innerText')]
+                        #print(postid)
+
+                        postids.append(postid)
+                        likes.append(heart_count.get_attribute('innerText'))
+                        categories.append(query)
+                        links.append(actual_image.get_attribute('src'))
+                        data.append(user.get_attribute('data-hearter-username'))
+
+                        #df.loc[len(df.index)]=[postid, heart_count.get_attribute('innerText'), query,
+
+                        #                       actual_image.get_attribute('src'),user.get_attribute('data-hearter-username')]
+                        #df.loc[len(df.index)]=\
+                        #    [actual_image.get_attribute('src'),user.get_attribute('data-hearter-username'),heart_count.get_attribute('innerText')]
                         #df.loc[len(df.index)]=[actual_image.get_attribute('src'),user.get_attribute('innerText'),heart_count.get_attribute('innerText')]
 
-                image_count = len(image_urls)
+                #image_count = len(image_urls)
                 """
                 if len(image_urls) >= max_links_to_fetch:
                     print(f"Found: {len(image_urls)} image links, done!\n\nImage details:\n")
@@ -93,8 +118,8 @@ class WeheartitScrapper:
                 """
             else:
                 #print("Found:", len(image_urls), "image links, looking for more ...")
-                time.sleep(30)
                 return
+                time.sleep(5)
                 load_more_button = self.driver.find_element_by_css_selector(".mye4qd")
                 if load_more_button:
                     self.driver.execute_script("document.querySelector('.mye4qd').click();")
@@ -103,6 +128,15 @@ class WeheartitScrapper:
             results_start = len(thumbnail_results)
 
         #return image_urls,users,hearts
+        data = {
+            'postid': pd.Series(postids),
+            'likes': pd.Series(likes),
+            'category': pd.Series(categories),
+            'link': pd.Series(links),
+            'data': pd.Series(data)
+        }
+        df = pd.DataFrame(data)
+
         return df
 
     #to download images
@@ -126,10 +160,10 @@ class WeheartitScrapper:
 
     #call functions to fetch urls and download images
     def search_and_download(self, search_term:str,target_path='./images',number_images=5):
-        target_folder = os.path.join(target_path,'_'.join(search_term.lower().split(' ')))
+        #target_folder = os.path.join(target_path,'_'.join(search_term.lower().split(' ')))
 
-        if not os.path.exists(target_folder):
-            os.makedirs(target_folder)
+        #if not os.path.exists(target_folder):
+        #    os.makedirs(target_folder)
 
         #with self.driver as self.driver:
         res = self.fetch_image_urls(search_term, number_images, sleep_between_interactions=0.5)
@@ -156,7 +190,6 @@ class WeheartitScrapper:
             else:
                 new_df = self.search_and_download(term)
                 df.append(new_df, ignore_index =True)
-
         return df
 
     def edit_terms(self, terms):
