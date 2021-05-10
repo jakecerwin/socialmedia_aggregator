@@ -22,27 +22,13 @@ class AccountPage(tk.Frame):
 
 
 class AccountFrame(tk.Frame):
-    def toggle(self):
-        self.static = not self.static
-        if self.static:
-            tk.Button(self, image=self.on, text='use example data',
-                      fg='#3e433f', bg='#3e433f',
-                      command=lambda: self.toggle()).grid(row=2, column=1)
-        else:
-            tk.Button(self, image=self.off, text='use example data',
-                      fg='#3e433f', bg='#3e433f',
-                      command=lambda: self.toggle()).grid(row=2, column=1)
-
     def __init__(self, parent, controller):
         self.u_name = tk.StringVar()
         self.pw = tk.StringVar()
-        self.static = True
-        self.on = ImageTk.PhotoImage(Image.open(idir+'on.png').resize((50, 20), Image.ANTIALIAS))
-        self.off = ImageTk.PhotoImage(Image.open(idir+'off.png').resize((50, 20), Image.ANTIALIAS))
 
         tk.Frame.__init__(self, parent, width=600, height=400, bg='#3e433f')
         #tk.Label(self, text='Welcome to socialHub', fg='white', bg='#3e433f').grid(row=1, column=1, sticky='n')
-        tk.Label(self, text='Use Static Data:', fg='white', bg='#3e433f').grid(row=2, column=0)
+        tk.Label(self, text='Instagram Password:', fg='white', bg='#3e433f').grid(row=2, column=0)
         if self.static:
             tk.Button(self, image=self.on, text='use example data',
                       fg='#3e433f', bg='#3e433f',

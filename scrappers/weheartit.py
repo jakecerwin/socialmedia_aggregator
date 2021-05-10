@@ -8,6 +8,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from PIL import Image 
 import requests, io, hashlib
 import pandas as pd
+import numpy as np
 
 class WeheartitScrapper:
     def __init__(self, terms, debug=False):
@@ -129,11 +130,11 @@ class WeheartitScrapper:
 
         #return image_urls,users,hearts
         data = {
-            'postid': pd.Series(postids),
-            'likes': pd.Series(likes),
-            'category': pd.Series(categories),
-            'link': pd.Series(links),
-            'data': pd.Series(data)
+            'postid': np.array(postids),
+            'likes': np.array(likes),
+            'category': np.array(categories),
+            'link': np.array(links),
+            'data': np.array(data)
         }
         df = pd.DataFrame(data)
 

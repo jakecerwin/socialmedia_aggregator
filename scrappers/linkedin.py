@@ -10,6 +10,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup
 import time
 import pandas as pd
+import numpy as np
 
 
 
@@ -107,14 +108,14 @@ class LinkedinScrapper:
         time.sleep(2)
 
         data = {
-            'postid': pd.Series(postids),
-            'likes': pd.Series(number_likes),
-            'category': pd.Series(names),
-            'link': pd.Series(images),
-            'data': pd.Series(names)
+            'postid': np.array(postids),
+            'likes': np.array(number_likes),
+            'category': np.array(names),
+            'link': np.array(images),
+            'data': np.array(names)
         }
-        #data = {'User Image url': pd.Series(images), 'Name': pd.Series(names),
-        #        'Post Content': pd.Series(contents), 'Likes': pd.Series(number_likes)}
+        #data = {'User Image url': np.array(images), 'Name': np.array(names),
+        #        'Post Content': np.array(contents), 'Likes': np.array(number_likes)}
         df = pd.DataFrame(data)
 
         df.dropna(subset=["link"], inplace=True)

@@ -87,7 +87,7 @@ class PinterestScrapper:
             self.driver.execute_script("window.scrollTo(1,100000)")
             time.sleep(1)
 
-        data = {'postid': np.array(ids), 'likes': pd.Series(likes),
+        data = {'postid': np.array(ids), 'likes': np.array(likes),
                 'category': np.array(categories),
                 'link': np.array(images),
                 'data': np.array(data)}

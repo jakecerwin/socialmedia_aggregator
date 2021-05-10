@@ -18,7 +18,7 @@ def graph(instagram, weheartit):
 
     user = instagram.groupby("category").mean()
 
-  
+
 
     user.plot.bar()
     plt.title('Average Instagram Likes per Account')
