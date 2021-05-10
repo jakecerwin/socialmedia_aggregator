@@ -13,10 +13,6 @@ import frontend.gui_controller as gc
 
 
 # import backend
-from scrappers.pinterest import PinterestScrapper
-from scrappers.linkedin import LinkedinScrapper
-from scrappers.instagram import InstagramScrapper
-from scrappers.weheartit import WeheartitScrapper
 
 
 

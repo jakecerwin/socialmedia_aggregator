@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on Thu May  6 15:32:15 2021
-@author: Vivian
+@author: Vivian and Jake
 """
 
 import tkinter as tk
@@ -18,6 +18,7 @@ ddir = 'data/graphs/'
 
 class MainPage(tk.Frame):
     def __init__(self, parent, controller):
+
         tk.Frame.__init__(self, parent)
 
         self.img_ls = []
@@ -101,7 +102,7 @@ class LeftFrame(tk.Frame):
 
 
 class RightFrame(tk.Frame):
-    def __init__(self, parent):
+    def __init__(self, parent, static=True):
         tk.Frame.__init__(self, parent, width=550, height=500, bg='#c4c4c4')
         # 2.1 vertical scroll bar
 
@@ -122,7 +123,10 @@ class RightFrame(tk.Frame):
 
         parent.img_ls = []
         # populate the frame
-        df = gc.read_static()
+        if static:
+            df = gc.read_static()
+        else:
+            df = gc.read_static()
         df_shuffled = df.sample(frac=1).reset_index(drop=True)
 
         """

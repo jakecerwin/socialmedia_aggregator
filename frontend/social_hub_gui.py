@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on Thu May  6 14:38:18 2021
-@author: Vivian
+@author: Vivian and Jake
 """
 
 import tkinter as tk

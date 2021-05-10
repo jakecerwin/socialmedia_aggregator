@@ -1,14 +1,59 @@
 # -*- coding: utf-8 -*-
 """
 Created on Thu May  6 13:25:07 2021
-@author: Vivian
+@author: Vivian and Jake
 """
 
 import tkinter as tk
 from PIL import ImageTk, Image
 from frontend.main_page_gui import MainPage
 import frontend.gui_controller as gc
-import os
+import pandas as pd
+
+from scrappers.pinterest import PinterestScrapper
+from scrappers.linkedin import LinkedinScrapper
+from scrappers.instagram import InstagramScrapper
+from scrappers.weheartit import WeheartitScrapper
+
+def scrape_test():
+    df_labels = pd.Series(['postid', 'likes', 'category', 'imagelink', 'data'])
+
+    usernamePinterest = 'jake.cerwin@yahoo.com'
+    passwordPinterest = 'datafocusedpythOn'
+
+    usernameLinkedIn = 'jake.cerwin@yahoo.com'
+    passwordLinkedIn = '1800317'
+    instagram_followers = ['carnegiemellon', 'iris_rover', 'mse_cmu', 'tartanathletics', 'cmusasc']
+    weheartit_searches = ['tech', 'travel', 'plants', 'design']
+
+    # create scrappers
+    linkedin = LinkedinScrapper(usernameLinkedIn, passwordLinkedIn)
+    pinterest = PinterestScrapper(usernamePinterest, passwordPinterest)
+    instagram = InstagramScrapper(instagram_followers)
+    weheartit = WeheartitScrapper(weheartit_searches)
+    scrappers = [linkedin, pinterest, instagram, weheartit]
+    scrapper_labels = ['linkedin', 'pinterest', 'instagram', 'weheartit']
+
+    # scrape
+    dfs = [pd.DataFrame(df_labels)] * len(scrappers)
+    for i in range(len(scrappers)):
+
+        try:
+            df = scrappers[i].scrape()
+            if df is not None:
+                dfs[i] = df
+        except:
+            print("failure: " + scrapper_labels[i])
+
+    # save
+    for i in range(len(scrappers)):
+        dfs[i].to_csv('data/' + str(scrapper_labels[i]) + '.csv', index=False)
+
+
+    linkedin.close()
+    pinterest.close()
+    weheartit.close()
+    instagram.close()
 
 LARGEFONT = ("Verdana", 35)
 idir = 'frontend/images/'
@@ -70,6 +115,9 @@ class LoginFrame(tk.Frame):
         if static:
             controller.show_frame(MainPage)
         else:
+            print('scraping')
+            scrape_test()
+            print('done')
             controller.show_frame(MainPage) # change to dynamic
 
 

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on Tue May  4 11:28:55 2021
-@author: Vivian
+@author: Vivian and Jake
 """
 import pandas as pd
 import matplotlib
@@ -37,7 +37,7 @@ def read_static(dir='example_data'): # will replace on backend to negate csv rel
     weheartit = pd.read_csv(dir+'/weheartit.csv')
     user = instagram.groupby("category").mean()
 
-    plt.figure()
+
     user.plot.bar()
     plt.title('Average Instagram Likes per Account')
 
@@ -45,16 +45,18 @@ def read_static(dir='example_data'): # will replace on backend to negate csv rel
     plt.ylabel('Account')
     plt.xticks(rotation=0)
     plt.savefig('data/graphs/instagram.png')
+    plt.close()
 
     user = weheartit.groupby("category").mean()
 
-    plt.figure()
+
     user.plot.bar()
     plt.title('Average WeHeartIt Likes per Search Term')
     plt.xlabel('Number of Likes')
     plt.ylabel('Search Term')
     plt.xticks(rotation=0)
     plt.savefig('data/graphs/weheartit.png')
+    plt.close()
 
     return combined_df
 
