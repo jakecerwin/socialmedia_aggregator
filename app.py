@@ -4,7 +4,7 @@
 """
 
 import pandas as pd
-import time
+import time, os, shutil
 import tkinter as tk
 
 #import frontend
@@ -18,7 +18,6 @@ import frontend.gui_controller as gc
 
 # Interface for image objects will be a queue (list) of
 
-static = True
 
 # Scrapped data format
 # postid - 2 letter social media prefix followed by 8 digit unique number
@@ -35,9 +34,16 @@ passwordPinterest = 'datafocusedpythOn'
 usernameLinkedIn  = 'jake.cerwin@yahoo.com'
 passwordLinkedIn  = '1800317'
 
+
 # move example_data to data
+shutil.rmtree('user_data', ignore_errors=True)
+shutil.rmtree('data', ignore_errors=True)
+
+shutil.copytree('default_user_data', 'user_data')
+shutil.copytree('example_data', 'data')
 
 
+# run application
 root = tk.Tk()
 root.title("SocialHub1.0")
 root.geometry('800x500')

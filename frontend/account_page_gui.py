@@ -3,6 +3,7 @@ from PIL import ImageTk, Image
 
 import frontend.gui_controller as gc
 import pandas as pd
+import numpy as np
 
 from run import scrape
 
@@ -62,7 +63,7 @@ class AccountFrame(tk.Frame):
         tk.Label(self, text='Linkedin Password:', fg='white', bg='#3e433f').grid(row=3, column=0)
         tk.Entry(self, textvariable=self.lk_pas).grid(row=3, column=1)
 
-        tk.Label(self, text='For the following seperate ',
+        tk.Label(self, text='For the following seperate',
                  fg='white', bg='#3e433f').grid(row=4, column=0, sticky='e')
         tk.Label(self, text='search terms by commas',
                  fg='white', bg='#3e433f').grid(row=4, column=1, sticky='w')
@@ -90,6 +91,14 @@ class AccountFrame(tk.Frame):
         #gc.log_in(self.u_name.get(), self.pw.get())
         print([self.pi_acc.get(), self.pi_pas.get(), self.lk_acc.get(),
                self.lk_pas.get(), self.ig.get(), self.wh.get()])
+
+
+        df = pd.DataFrame(np.array([['pinterest', self.pi_acc.get(), self.pi_pas.get()],
+                                     ['linkedin', self.lk_acc.get(),self.lk_pas.get()]]),
+                                     columns=['media', 'username', 'password'], )
+        breakpoint()
+        df.to_csv('user_data/accounts.csv', index= False)
+
         breakpoint()
 
         print('scraping')
