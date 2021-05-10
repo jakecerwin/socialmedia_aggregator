@@ -124,7 +124,7 @@ class RightFrame(tk.Frame):
         parent.img_ls = []
         # populate the frame
         if static:
-            df = gc.read_static()
+            df = gc.read_static('example_data')
         else:
             df = gc.read_static()
         df_shuffled = df.sample(frac=1).reset_index(drop=True)

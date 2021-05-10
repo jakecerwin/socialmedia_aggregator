@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu May  6 13:25:07 2021
-@author: Vivian and Jake
-"""
-
 import tkinter as tk
 from PIL import ImageTk, Image
 from frontend.main_page_gui import MainPage
@@ -15,8 +9,7 @@ from run import scrape
 LARGEFONT = ("Verdana", 35)
 idir = 'frontend/images/'
 
-
-class LandingPage(tk.Frame):
+class AccountPage(tk.Frame):
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent, width=800, height=500, bg='#3e433f')
@@ -24,11 +17,11 @@ class LandingPage(tk.Frame):
         self.title_frame = TitleFrame(self)
         self.title_frame.pack()
 
-        self.login = LoginFrame(self, controller)
+        self.login = AccountFrame(self, controller)
         self.login.pack()
 
 
-class LoginFrame(tk.Frame):
+class AccountFrame(tk.Frame):
     def toggle(self):
         self.static = not self.static
         if self.static:
@@ -73,7 +66,7 @@ class LoginFrame(tk.Frame):
             controller.show_frame(MainPage)
         else:
             print('scraping')
-            scrape()
+            scrape_test()
             print('done')
             controller.show_frame(MainPage) # change to dynamic
 

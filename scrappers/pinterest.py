@@ -10,6 +10,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup
 import time
 import pandas as pd
+import numpy as np
 import random
 
 debug = False
@@ -86,10 +87,10 @@ class PinterestScrapper:
             self.driver.execute_script("window.scrollTo(1,100000)")
             time.sleep(1)
 
-        data = {'postid': pd.Series(ids), 'likes': pd.Series(likes),
-                'category': pd.Series(categories),
-                'link': pd.Series(images),
-                'data': pd.Series(data)}
+        data = {'postid': np.array(ids), 'likes': pd.Series(likes),
+                'category': np.array(categories),
+                'link': np.array(images),
+                'data': np.array(data)}
         df = pd.DataFrame(data)
 
         # df.to_csv('data/cleaned_pinterest.csv', index=False)
@@ -110,16 +111,21 @@ if __name__ == "__main__":
     ROOT = tk.Tk()
 
     ROOT.withdraw()
-
+    """
     USERNAME = simpledialog.askstring(title="Login",
                                       prompt="Username")
     PASSWORD = simpledialog.askstring(title="Login",
                                       prompt="Password")
+    """
+    USERNAME = 'jakecerwin@gmail.com'
+    PASSWORD = 'dummypassword1'
 
-    pinterest = PinterestScrapper(USERNAME, PASSWORD)
+
+    pinterest = PinterestScrapper(USERNAME, PASSWORD, True)
     time.sleep(5)
     df = pinterest.scrape()
     pinterest.close()
+
 
     print(df.head())
 
