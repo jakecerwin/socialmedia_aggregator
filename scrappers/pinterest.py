@@ -57,7 +57,7 @@ class PinterestScrapper:
         fmt = ""
 
         # get five scrolls of data
-        for _ in range(1, 5):
+        for _ in range(1, 3):
             soup = BeautifulSoup(self.driver.page_source, 'html.parser')
 
             # get the image from div with pinrep-image test-id
@@ -78,7 +78,7 @@ class PinterestScrapper:
                     id = 'pt'+ str(self.scraped_count).zfill(8)
 
                     ids.append(id)
-                    likes.append(time.time_ns() % 1000) #spoof temporarily
+                    likes.append(random.randint(0,200)) #spoof temporarily
                     data.append("feed")
                     categories.append(self.user)
 

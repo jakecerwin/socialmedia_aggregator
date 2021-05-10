@@ -4,6 +4,7 @@ from PIL import ImageTk, Image
 import frontend.gui_controller as gc
 import pandas as pd
 import numpy as np
+from frontend.main_page_gui import MainPage
 
 from run import scrape
 
@@ -74,7 +75,7 @@ class AccountFrame(tk.Frame):
         tk.Label(self, text='search terms by commas',
                  fg='white', bg='#3e433f').grid(row=4, column=1, sticky='w')
 
-        tk.Label(self, text='Instagram Accounts to follow:WeHeartIt Topics:', fg='white', bg='#3e433f').grid(row=5, column=0)
+        tk.Label(self, text='Instagram Accounts to follow:', fg='white', bg='#3e433f').grid(row=5, column=0)
         tk.Entry(self, textvariable=self.ig).grid(row=5, column=1)
         tk.Label(self, text='WeHeartIt Topics:', fg='white', bg='#3e433f').grid(row=6, column=0)
         tk.Entry(self, textvariable=self.wh).grid(row=6, column=1)

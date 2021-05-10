@@ -25,6 +25,7 @@ class SocialHubApp(tk.Frame):
 
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
+        self.container = container
 
         # initializing frames to an empty array
         self.frames = {}
@@ -44,6 +45,16 @@ class SocialHubApp(tk.Frame):
         self.show_frame(LandingPage)
 
     def load_main(self):
+        for F in (LandingPage, AccountPage, MainPage,):
+            frame = F(self.container, self)
+
+            # initializing frame of that object from
+            # startpage, page1, page2 respectively with
+            # for loop
+            self.frames[F] = frame
+
+            frame.grid(row=0, column=0, sticky="nsew")
+
         self.show_frame(MainPage)
 
 

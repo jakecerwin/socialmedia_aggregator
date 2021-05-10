@@ -42,16 +42,38 @@ def graph(instagram, weheartit):
     return None
 
 
-def scrape(dir='data/'):
+def scrape():
+
+    accounts = pd.read_csv('user_data/accounts.csv')
+    following = pd.read_csv('user_data/instagram_follows.csv')
+    topics = pd.read_csv('user_data/weheartit_topics.csv')
+    following_lst, topics_lst = [], []
+
+    for i, row in following.iterrows():
+        following_lst.append(row.to_numpy()[0])
+
+    for i, row in topics.iterrows():
+        topics_lst.append(row.to_numpy()[0])
+
+    pinterest = accounts.loc[accounts['media'] == 'pinterest']
+    linkedin = accounts.loc[accounts['media'] == 'linkedin']
+
+    usernamePinterest = pinterest['username'].to_numpy()[0]
+    passwordPinterest = pinterest['password'].to_numpy()[0]
+    usernameLinkedIn = linkedin['username'].to_numpy()[0]
+    passwordLinkedIn = linkedin['password'].to_numpy()[0]
+
     df_labels = pd.Series(['postid', 'likes', 'category', 'imagelink', 'data'])
 
-    usernamePinterest = 'jake.cerwin@yahoo.com'
-    passwordPinterest = 'datafocusedpythOn'
+    #usernamePinterest = 'jake.cerwin@yahoo.com'
+    #passwordPinterest = 'datafocusedpythOn'
 
-    usernameLinkedIn = 'jake.cerwin@yahoo.com'
-    passwordLinkedIn = '1800317'
+    #usernameLinkedIn = 'jake.cerwin@yahoo.com'
+    #passwordLinkedIn = '1800317'
     instagram_followers = ['carnegiemellon', 'iris_rover', 'mse_cmu', 'tartanathletics', 'cmusasc']
     weheartit_searches = ['tech', 'travel', 'plants', 'design']
+    instagram_followers = following_lst
+    weheartit_searches = topics_lst
 
     # create scrappers
     linkedin = LinkedinScrapper(usernameLinkedIn, passwordLinkedIn)
@@ -74,10 +96,11 @@ def scrape(dir='data/'):
 
     # save
     for i in range(len(scrappers)):
-        dfs[i].to_csv(dir + str(scrapper_labels[i]) + '.csv', index=False)
+        dfs[i].to_csv('data/' + str(scrapper_labels[i]) + '.csv', index=False)
 
 
     linkedin.close()
     pinterest.close()
     weheartit.close()
     instagram.close()
+    #graph(dfs[2], dfs[3])

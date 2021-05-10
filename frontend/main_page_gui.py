@@ -9,6 +9,7 @@ from PIL import ImageTk, Image
 import io
 import requests
 import frontend.gui_controller as gc
+from run import scrape
 
 # import messagebox from tkinter module
 import tkinter.messagebox
@@ -138,9 +139,10 @@ class RightFrame(tk.Frame):
         parent.img_ls = []
         # populate the frame
         if static:
-            df = gc.read_static('example_data')
+            df = gc.read_static('data')
         else:
-            df = gc.read_static()
+            scrape()
+            df = gc.read_static('data')
         df_shuffled = df.sample(frac=1).reset_index(drop=True)
 
         """
