@@ -63,11 +63,14 @@ class LoginFrame(tk.Frame):
         self.password = tk.Entry(self, textvariable=self.pw).grid(row=2, column=1)
         """
         tk.Label(self, text='click when ready', fg='white', bg='#3e433f').grid(row=3, column=0)
-        tk.Button(self, text='launch', command=lambda: self.log_in(controller)).grid(row=3, column=1)
+        tk.Button(self, text='launch', command=lambda: self.log_in(controller, self.static)).grid(row=3, column=1)
 
-    def log_in(self, controller):
+    def log_in(self, controller, static):
         gc.log_in(self.u_name.get(), self.pw.get())
-        controller.show_frame(MainPage)
+        if static:
+            controller.show_frame(MainPage)
+        else:
+            controller.show_frame(MainPage) # change to dynamic
 
 
 class TitleFrame(tk.Frame):

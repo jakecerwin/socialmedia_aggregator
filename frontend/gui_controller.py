@@ -4,6 +4,9 @@ Created on Tue May  4 11:28:55 2021
 @author: Vivian
 """
 import pandas as pd
+import matplotlib
+matplotlib.use("TkAgg")
+from matplotlib import pyplot as plt
 
 
 
@@ -25,10 +28,37 @@ def display_likes(platform_name):
     pass
 
 
-def read_static(dir='data'): # will replace on backend to negate csv reliance
+def read_static(dir='example_data'): # will replace on backend to negate csv reliance
     #img_urls = pd.DataFrame(columns=['postid','likes','category','link','data'])
     filenames = [dir+'/instagram.csv', dir+'/linkedin.csv', dir+'/pinterest.csv', dir+'/weheartit.csv']
     combined_df = pd.concat([pd.read_csv(f) for f in filenames])
+
+    instagram = pd.read_csv(dir+'/instagram.csv')
+    weheartit = pd.read_csv(dir+'/weheartit.csv')
+    user = instagram.groupby("category").mean()
+
+    plt.figure()
+    user.plot.bar()
+    plt.title('Average Instagram Likes per Account')
+
+    plt.xlabel('Number of Likes')
+    plt.ylabel('Account')
+    plt.xticks(rotation=0)
+    plt.savefig('data/graphs/instagram.png')
+
+    user = weheartit.groupby("category").mean()
+
+    plt.figure()
+    user.plot.bar()
+    plt.title('Average WeHeartIt Likes per Search Term')
+    plt.xlabel('Number of Likes')
+    plt.ylabel('Search Term')
+    plt.xticks(rotation=0)
+    plt.savefig('data/graphs/weheartit.png')
+
+
+
+
 
     return combined_df
 

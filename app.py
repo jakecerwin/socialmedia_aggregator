@@ -40,8 +40,8 @@ usernameLinkedIn  = 'jake.cerwin@yahoo.com'
 passwordLinkedIn  = '1800317'
 
 if not static:
-    instagram_followers = ['carnegiemellon', 'iris_rover', 'mse_cmu']
-    weheartit_searches = ['tech', 'travel']
+    instagram_followers = ['carnegiemellon', 'iris_rover', 'mse_cmu', 'tartanathletics', 'cmusasc']
+    weheartit_searches = ['tech', 'travel', 'plants', 'design']
 
 
     # create scrappers

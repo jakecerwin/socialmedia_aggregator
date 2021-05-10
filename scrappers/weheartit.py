@@ -189,7 +189,7 @@ class WeheartitScrapper:
                 df = self.search_and_download(term)
             else:
                 new_df = self.search_and_download(term)
-                df.append(new_df, ignore_index =True)
+                df = df.append(new_df, ignore_index =True)
         return df
 
     def edit_terms(self, terms):
