@@ -32,11 +32,17 @@ class AccountFrame(tk.Frame):
 
         for i, row in following.iterrows():
             #print(row.to_numpy()[0])
-            followingstr += row.to_numpy()[0] + ', '
+            if  followingstr != '' :
+                followingstr += ', '
+            followingstr += row.to_numpy()[0]
+
 
         for i, row in topics.iterrows():
             #print(row.to_numpy()[0])
-            topicstr += row.to_numpy()[0] + ', '
+            if topicstr!= '':
+                topicstr += ', '
+            topicstr += row.to_numpy()[0]
+
 
 
         pinterest = accounts.loc[accounts['media'] == 'pinterest']
@@ -68,9 +74,9 @@ class AccountFrame(tk.Frame):
         tk.Label(self, text='search terms by commas',
                  fg='white', bg='#3e433f').grid(row=4, column=1, sticky='w')
 
-        tk.Label(self, text='WeHeartIt Topics:', fg='white', bg='#3e433f').grid(row=5, column=0)
+        tk.Label(self, text='Instagram Accounts to follow:WeHeartIt Topics:', fg='white', bg='#3e433f').grid(row=5, column=0)
         tk.Entry(self, textvariable=self.ig).grid(row=5, column=1)
-        tk.Label(self, text='Instagram Accounts to follow:', fg='white', bg='#3e433f').grid(row=6, column=0)
+        tk.Label(self, text='WeHeartIt Topics:', fg='white', bg='#3e433f').grid(row=6, column=0)
         tk.Entry(self, textvariable=self.wh).grid(row=6, column=1)
 
 
@@ -89,20 +95,38 @@ class AccountFrame(tk.Frame):
     def submit(self, controller):
 
         #gc.log_in(self.u_name.get(), self.pw.get())
-        print([self.pi_acc.get(), self.pi_pas.get(), self.lk_acc.get(),
-               self.lk_pas.get(), self.ig.get(), self.wh.get()])
 
 
         df = pd.DataFrame(np.array([['pinterest', self.pi_acc.get(), self.pi_pas.get()],
                                      ['linkedin', self.lk_acc.get(),self.lk_pas.get()]]),
                                      columns=['media', 'username', 'password'], )
-        breakpoint()
+
         df.to_csv('user_data/accounts.csv', index= False)
 
-        breakpoint()
+        ig = self.ig.get()
+        ig_follows = ig.replace(' ', '').split(',')
+        while True:
+            try:
+                ig_follows.remove("")
+            except:
+                break
+        df = pd.DataFrame(ig_follows, columns=['account'])
+        df.to_csv('user_data/instagram_follows.csv', index=False)
+
+        wh = self.wh.get()
+        wh_topics = wh.replace('  ', ' ').replace(', ', ',').replace(' ,', ',').split(',')
+        while True:
+            try:
+                wh_topics.remove("")
+            except:
+                break
+        df = pd.DataFrame(wh_topics, columns=['topic'])
+        df.to_csv('user_data/weheartit_topics.csv', index=False)
+
+
 
         print('scraping')
-        #scrape()
+        scrape()
 
         controller.load_main() # change to dynamic
 

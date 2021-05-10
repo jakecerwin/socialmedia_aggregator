@@ -27,13 +27,13 @@ import frontend.gui_controller as gc
 # data- string
 
 df_labels = pd.Series(['postid','likes','category','imagelink','data'])
-
+"""
 usernamePinterest = 'jake.cerwin@yahoo.com'
 passwordPinterest = 'datafocusedpythOn'
 
 usernameLinkedIn  = 'jake.cerwin@yahoo.com'
 passwordLinkedIn  = '1800317'
-
+"""
 
 # move example_data to data
 shutil.rmtree('user_data', ignore_errors=True)

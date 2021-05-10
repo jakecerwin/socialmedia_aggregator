@@ -44,7 +44,7 @@ class SocialHubApp(tk.Frame):
         self.show_frame(LandingPage)
 
     def load_main(self):
-        self.show_frame(AccountPage)
+        self.show_frame(MainPage)
 
 
     # to display the current frame passed as
