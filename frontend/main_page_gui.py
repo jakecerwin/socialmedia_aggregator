@@ -9,6 +9,7 @@ from PIL import ImageTk, Image
 import io
 import requests
 import frontend.gui_controller as gc
+
 # import messagebox from tkinter module
 import tkinter.messagebox
 idir = 'frontend/images/'
@@ -27,7 +28,7 @@ class MainPage(tk.Frame):
         pass
 
         # create frames for layout
-        leftFrame = LeftFrame(self)
+        leftFrame = LeftFrame(self, controller)
         leftFrame.grid(row=0, column=0)
 
         # right = RightFrame(self)
@@ -40,7 +41,7 @@ class MainPage(tk.Frame):
 
 
 class LeftFrame(tk.Frame):
-    def __init__(self, parent):
+    def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent, width=250, height=500, bg='#515151')
 
         # 1.1 profile pannel
@@ -55,8 +56,10 @@ class LeftFrame(tk.Frame):
         self.profile_img_label.place(relx=0.1, rely=0.3)
 
         # profile name and account
-        self.profile_name = tk.Label(self.left_upper, text='name goes here', fg='white', bg='#515151')
+        self.profile_name = tk.Label(self.left_upper, text='Edit Accounts', fg='white', bg='#515151')
         self.profile_email = tk.Label(self.left_upper, text='email goes here', fg='white', bg='#515151')
+        self.profile_email= tk.Button(self.left_upper, text='click', fg="white", width=25, height=2, bg='#515151',
+                               command=self.load_account_page(controller))
         self.profile_name.place(relx=0.4, rely=0.3)
         self.profile_email.place(relx=0.4, rely=0.5)
 
@@ -99,6 +102,13 @@ class LeftFrame(tk.Frame):
 
         self.b_graph_ins.place(relx=0.09, rely=0)
         self.b_graph_whi.place(relx=0.09, rely=0.41)
+
+    def load_account_page(self, controller):
+        from frontend.account_page_gui import AccountPage
+        #gc.log_in(self.u_name.get(), self.pw.get())
+        controller.show_frame(AccountPage)
+
+    #def refresh():
 
 
 class RightFrame(tk.Frame):

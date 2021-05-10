@@ -1,6 +1,6 @@
 import tkinter as tk
 from PIL import ImageTk, Image
-from frontend.main_page_gui import MainPage
+
 import frontend.gui_controller as gc
 import pandas as pd
 
@@ -29,14 +29,8 @@ class AccountFrame(tk.Frame):
         tk.Frame.__init__(self, parent, width=600, height=400, bg='#3e433f')
         #tk.Label(self, text='Welcome to socialHub', fg='white', bg='#3e433f').grid(row=1, column=1, sticky='n')
         tk.Label(self, text='Instagram Password:', fg='white', bg='#3e433f').grid(row=2, column=0)
-        if self.static:
-            tk.Button(self, image=self.on, text='use example data',
-                      fg='#3e433f', bg='#3e433f',
-                      command=lambda: self.toggle()).grid(row=2, column=1)
-        else:
-            tk.Button(self, image=self.ff, text='use example data',
-                      fg='#3e433f', bg='#3e433f',
-                      command=lambda: self.toggle()).grid(row=2, column=1)
+        self.user_name = tk.Entry(self, textvariable=self.u_name).grid(row=1, column=1)
+
         """
         tk.Label(self, text='Name', fg='white', bg='#3e433f').grid(row=1, column=0, sticky='w')
         self.user_name = tk.Entry(self, textvariable=self.u_name).grid(row=1, column=1)
@@ -44,17 +38,16 @@ class AccountFrame(tk.Frame):
         self.password = tk.Entry(self, textvariable=self.pw).grid(row=2, column=1)
         """
         tk.Label(self, text='click when ready', fg='white', bg='#3e433f').grid(row=3, column=0)
-        tk.Button(self, text='launch', command=lambda: self.log_in(controller, self.static)).grid(row=3, column=1)
+        tk.Button(self, text='submit', command=lambda: self.submit(controller, self.static)).grid(row=3, column=1)
 
-    def log_in(self, controller, static):
-        gc.log_in(self.u_name.get(), self.pw.get())
-        if static:
-            controller.show_frame(MainPage)
-        else:
-            print('scraping')
-            scrape_test()
-            print('done')
-            controller.show_frame(MainPage) # change to dynamic
+    def submit(self, controller, static):
+
+        #gc.log_in(self.u_name.get(), self.pw.get())
+
+        print('scraping')
+        scrape()
+
+        controller.load_main() # change to dynamic
 
 
 class TitleFrame(tk.Frame):

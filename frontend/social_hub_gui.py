@@ -7,6 +7,7 @@ Created on Thu May  6 14:38:18 2021
 import tkinter as tk
 from frontend.landing_page_gui import LandingPage
 from frontend.main_page_gui import MainPage
+from frontend.account_page_gui import AccountPage
 import frontend.gui_controller as gc
 
 
@@ -30,7 +31,7 @@ class SocialHubApp(tk.Frame):
 
         # iterating through a tuple consisting
         # of the different page layouts
-        for F in (LandingPage, MainPage):
+        for F in (LandingPage, AccountPage, MainPage,):
             frame = F(container, self)
 
             # initializing frame of that object from
@@ -41,6 +42,10 @@ class SocialHubApp(tk.Frame):
             frame.grid(row=0, column=0, sticky="nsew")
 
         self.show_frame(LandingPage)
+
+    def load_main(self):
+        self.show_frame(AccountPage)
+
 
     # to display the current frame passed as
     # parameter
