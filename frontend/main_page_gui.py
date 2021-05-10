@@ -45,7 +45,7 @@ class LeftFrame(tk.Frame):
         self.left_upper.pack(side='top', fill='both')
 
         # profile img
-        with Image.open(idir+"placeholder1.png") as img:
+        with Image.open(idir+"placeholder.png") as img:
             self.profile_img = ImageTk.PhotoImage(img.resize((60, 60), Image.ANTIALIAS))
 
         self.profile_img_label = tk.Label(self.left_upper, image=self.profile_img, width=60, height=60)
@@ -139,7 +139,10 @@ class RightFrame(tk.Frame):
         """
         i = 0
         for _, row in df_shuffled.iterrows():
-            response = requests.get(row['link'])
+            try:
+                response = requests.get(row['link'])
+            except:
+                continue
 
             image_bytes = io.BytesIO(response.content)
             img = Image.open(image_bytes)
