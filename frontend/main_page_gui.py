@@ -112,7 +112,7 @@ class RightFrame(tk.Frame):
         df = gc.read_static()
         df_shuffled = df.sample(frac=1).reset_index(drop=True)
 
-
+        """
         for ind in df.index:
             response = requests.get(df_shuffled['Urls'][ind])
             print(df_shuffled['Urls'][ind])
@@ -136,6 +136,32 @@ class RightFrame(tk.Frame):
             except:
                 print('failed')
                 break
+        """
+        i = 0
+        for _, row in df_shuffled.iterrows():
+            response = requests.get(row['link'])
+
+            image_bytes = io.BytesIO(response.content)
+            img = Image.open(image_bytes)
+            parent.img_ls.append(ImageTk.PhotoImage(img))
+            tk.Button(self.inner_frame, image=parent.img_ls[i], text='img: ' + str(i), width=425, height=300,
+                  bg='grey', fg='white').grid(column=0, row=i, pady=8, padx=50)
+            tk.Label(self.inner_frame, text='@' + row['category'], fg='white', bg='grey').grid(column=0,
+                                                                                                row=i,
+                                                                                                pady=8,
+                                                                                                padx=50,
+                                                                                                sticky='NW')
+            tk.Label(self.inner_frame, text='❤ ' + str(row['likes']), fg='red', bg='grey').grid(column=0,
+                                                                                            row=i,
+                                                                                            pady=8,
+                                                                                            padx=50,
+                                                                                            sticky='SE')
+            img.close()
+            i += 1
+
+
+
+
 
     def on_configure(self, event):
         self.canvas.configure(scrollregion=self.canvas.bbox('all'))
