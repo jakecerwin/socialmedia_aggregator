@@ -23,26 +23,12 @@ def display_likes(platform_name):
     pass
 
 
-def read_static(): # will replace on backend to negate csv reliance
-    img_urls = pd.DataFrame(columns=['Urls', 'User', 'Likes'])
-    i = 0
-    with open('cleaned_pinterest.csv', 'rt', encoding='utf-8') as f:
-        for l in f.readlines()[1:]:
-            # img_urls.append(l.split(',')[0])
-            img_urls.loc[i] = [l.split(',')[0], l.split(',')[1].split('@')[0], 'Pinterest']
-            i += 1
+def read_static(dir='data'): # will replace on backend to negate csv reliance
+    #img_urls = pd.DataFrame(columns=['postid','likes','category','link','data'])
+    filenames = [dir+'/instagram.csv', dir+'/linkedin.csv', dir+'/pinterest.csv', dir+'/weheartit.csv']
+    combined_df = pd.concat([pd.read_csv(f) for f in filenames])
 
-    with open('weheartit.csv', 'rt', encoding='utf-8') as f:
-        for l in f.readlines()[1:]:
-            # img_urls.append(l.split(',')[0])
-            img_urls.loc[i] = [l.split(',')[0], l.split(',')[1], l.split(',')[2].rstrip()]
-            i += 1
-    with open('weheartit.csv', 'rt', encoding='utf-8') as f:
-        for l in f.readlines()[1:]:
-            # img_urls.append(l.split(',')[0])
-            img_urls.loc[i] = [l.split(',')[0], l.split(',')[1], l.split(',')[2].rstrip()]
-            i += 1
-    return img_urls
+    return combined_df
 
 
 def read_imgs(df_dict):

@@ -111,7 +111,8 @@ class RightFrame(tk.Frame):
         # populate the frame
         df = gc.read_static()
         df_shuffled = df.sample(frac=1).reset_index(drop=True)
-        print(df)
+
+
         for ind in df.index:
             response = requests.get(df_shuffled['Urls'][ind])
             print(df_shuffled['Urls'][ind])

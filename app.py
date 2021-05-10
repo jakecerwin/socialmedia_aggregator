@@ -39,44 +39,44 @@ passwordPinterest = 'datafocusedpythOn'
 usernameLinkedIn  = 'jake.cerwin@yahoo.com'
 passwordLinkedIn  = '1800317'
 
-
-instagram_followers = ['carnegiemellon', 'iris_rover', 'mse_cmu']
-weheartit_searches = ['tech', 'travel']
-
-
-# create scrappers
-linkedin = LinkedinScrapper(usernameLinkedIn, passwordLinkedIn)
-pinterest = PinterestScrapper(usernamePinterest, passwordPinterest)
-instagram = InstagramScrapper(instagram_followers)
-weheartit = WeheartitScrapper(weheartit_searches)
-scrappers = [linkedin, pinterest, instagram, weheartit]
-scrapper_labels = ['linkedin', 'pinterest', 'instagram', 'weheartit']
+if not static:
+    instagram_followers = ['carnegiemellon', 'iris_rover', 'mse_cmu']
+    weheartit_searches = ['tech', 'travel']
 
 
-# scrape
-dfs = [pd.DataFrame(df_labels)] * len(scrappers)
-for i in range(len(scrappers)):
-
-    try:
-        df = scrappers[i].scrape()
-        if df is not None:
-            dfs[i] = df
-    except:
-        print("failure: " + scrapper_labels[i] )
+    # create scrappers
+    linkedin = LinkedinScrapper(usernameLinkedIn, passwordLinkedIn)
+    pinterest = PinterestScrapper(usernamePinterest, passwordPinterest)
+    instagram = InstagramScrapper(instagram_followers)
+    weheartit = WeheartitScrapper(weheartit_searches)
+    scrappers = [linkedin, pinterest, instagram, weheartit]
+    scrapper_labels = ['linkedin', 'pinterest', 'instagram', 'weheartit']
 
 
+    # scrape
+    dfs = [pd.DataFrame(df_labels)] * len(scrappers)
+    for i in range(len(scrappers)):
+
+        try:
+            df = scrappers[i].scrape()
+            if df is not None:
+                dfs[i] = df
+        except:
+            print("failure: " + scrapper_labels[i] )
 
 
 
-# save
-for i in range(len(scrappers)):
-    dfs[i].to_csv('data/'+str(scrapper_labels[i])+'.csv', index=False)
 
 
-linkedin.close()
-pinterest.close()
-weheartit.close()
-instagram.close()
+    # save
+    for i in range(len(scrappers)):
+        dfs[i].to_csv('data/'+str(scrapper_labels[i])+'.csv', index=False)
+
+
+    linkedin.close()
+    pinterest.close()
+    weheartit.close()
+    instagram.close()
 
 """
 pinterest = PinterestScrapper(username, password)

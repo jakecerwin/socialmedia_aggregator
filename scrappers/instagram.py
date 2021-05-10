@@ -7,7 +7,7 @@ class InstagramScrapper:
 
         self.following = following
         self.max_depth = 25
-        self.columns = ['postid','likes', 'category','imagelink','data']
+        self.columns = ['postid','likes', 'category','link','data']
         self.SESSIONID = '47114138175%3AbgoISOWzPi3O6b%3A7'
         self.seen = set()
 
@@ -45,14 +45,14 @@ class InstagramScrapper:
                     id = 'ig' + str(int(post.json_dict['id']) % 100000000).zfill(8)
 
                     display_url = post.json_dict['display_url']
-                    caption = post.json_dict['edge_media_to_caption']['edges'][0]['node']
+                    caption = post.json_dict['edge_media_to_caption']['edges'][0]['node']['text']
                     category = handle
                     thumbnail = post.json_dict['thumbnail_resources'][0]['src']
                     likes = post.likes # post.json_dict['likes']
 
                     #print(likes)
                     df = df.append({'postid':id,'likes':likes,'category': category,
-                                    'imagelink':display_url,'data':caption}, ignore_index=True)
+                                    'link':display_url,'data':caption}, ignore_index=True)
 
 
                     depth += 1
