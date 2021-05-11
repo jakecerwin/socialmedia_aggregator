@@ -99,7 +99,7 @@ class WeheartitScrapper:
 
                         postids.append(postid)
                         likes.append(heart_count.get_attribute('innerText'))
-                        categories.append(query)
+                        categories.append('weheartit/' + query)
                         links.append(actual_image.get_attribute('src'))
                         data.append(user.get_attribute('data-hearter-username'))
 

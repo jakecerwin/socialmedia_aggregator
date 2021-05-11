@@ -78,9 +78,9 @@ class PinterestScrapper:
                     id = 'pt'+ str(self.scraped_count).zfill(8)
 
                     ids.append(id)
-                    likes.append(random.randint(0,200)) #spoof temporarily
+                    likes.append(random.randint(0, 200)) #spoof
                     data.append("feed")
-                    categories.append(self.user)
+                    categories.append("pinterest.com")
 
 
             # scroll down

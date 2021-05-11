@@ -82,7 +82,7 @@ class LinkedinScrapper:
                         image = i.img['src']
                         name = i.img['alt']
                         images.append(image)
-                        names.append(name)
+                        names.append('linkedin@' + name)
                         postids.append(postid)
 
 

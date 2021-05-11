@@ -56,33 +56,22 @@ class LeftFrame(tk.Frame):
             self.profile_img = ImageTk.PhotoImage(img.resize((60, 60), Image.ANTIALIAS))
 
         self.profile_img_label = tk.Label(self.left_upper, image=self.profile_img, width=60, height=60)
-        self.profile_img_label.place(relx=0.1, rely=0.3)
+        self.profile_img_label.place(relx=0.1, rely=0.2)
 
         # profile name and account
-        #self.profile_name = tk.Label(self.left_upper, text='Edit Accounts', fg='white', bg='#515151')
-        #self.profile_email = tk.Label(self.left_upper, text='email goes here', fg='white', bg='#515151')
-        self.profile_email= tk.Button(self.left_upper, text='Edit Accounts', fg="black", width=15, height=2,
+        self.profile_refresh = tk.Button(self.left_upper, text='Scrape new data', fg='black', bg='#515151',
+                                         width=15, height=2, command=self.refresh)
+
+        self.profile_edit= tk.Button(self.left_upper, text='Edit Accounts', fg="black", width=15, height=2,
                                       bg='#515151', command=self.load_account_page)
-        #self.profile_name.place(relx=0.4, rely=0.3)
-        self.profile_email.place(relx=0.4, rely=0.5)
+        self.profile_refresh.place(relx=0.4, rely=0.2)
+        self.profile_edit.place(relx=0.4, rely=0.5)
 
         # 1.2 button pannel
 
         self.left_lower = tk.Frame(self, width=250, height=460, bg='#515151')
         self.left_lower.pack(side='bottom', fill='both')
-        """
-        # buttons
-        self.b_all = tk.Button(self.left_lower, text='All', fg="black", width=25, height=2, bg='#dadada',
-                               command=gc.filter_platform('all', parent.img_ls))
-        self.b_ins = tk.Button(self.left_lower, text='Instagram', fg="black", width=25, height=2, bg='#dadada',
-                               command=gc.filter_platform('instagram', parent.img_ls))
-        self.b_pin = tk.Button(self.left_lower, text='Pinterest', fg="black", width=25, height=2, bg='#dadada',
-                               command=gc.filter_platform('pinterest', parent.img_ls))
-        self.b_link = tk.Button(self.left_lower, text='LinkedIn', fg="black", width=25, height=2, bg='#dadada',
-                                command=gc.filter_platform('linkedIn', parent.img_ls))
-        self.b_whi = tk.Button(self.left_lower, text='We Heart It', fg="black", width=25, height=2, bg='#dadada',
-                               command=gc.filter_platform('weheartit', parent.img_ls))
-        """
+
 
         with Image.open(ddir+"weheartit.png") as img:
             self.wh_graph_img = ImageTk.PhotoImage(img.resize((200, 180), Image.ANTIALIAS))
@@ -113,7 +102,10 @@ class LeftFrame(tk.Frame):
         #print('account page')
         self.controller.show_frame(AccountPage)
 
-    #def refresh():
+    def refresh(self, controller):
+        scrape()
+        self.controller.load_main()
+
 
 
 class RightFrame(tk.Frame):
@@ -145,31 +137,7 @@ class RightFrame(tk.Frame):
             df = gc.read_static('data')
         df_shuffled = df.sample(frac=1).reset_index(drop=True)
 
-        """
-        for ind in df.index:
-            response = requests.get(df_shuffled['Urls'][ind])
-            print(df_shuffled['Urls'][ind])
-            try:
-                image_bytes = io.BytesIO(response.content)
-                img = Image.open(image_bytes)
-                parent.img_ls.append(ImageTk.PhotoImage(img))
-                tk.Button(self.inner_frame, image=parent.img_ls[ind], text='img: ' + str(ind), width=425, height=300,
-                          bg='grey', fg='white').grid(column=0, row=ind, pady=8, padx=50)
-                tk.Label(self.inner_frame, text='@' + df_shuffled['User'][ind], fg='white', bg='grey').grid(column=0,
-                                                                                                            row=ind,
-                                                                                                            pady=8,
-                                                                                                            padx=50,
-                                                                                                            sticky='NW')
-                tk.Label(self.inner_frame, text='❤ ' + df_shuffled['Likes'][ind], fg='red', bg='grey').grid(column=0,
-                                                                                                            row=ind,
-                                                                                                            pady=8,
-                                                                                                            padx=50,
-                                                                                                            sticky='SE')
-                img.close()
-            except:
-                print('failed')
-                break
-        """
+
         i = 0
         for _, row in df_shuffled.iterrows():
             try:
@@ -178,11 +146,21 @@ class RightFrame(tk.Frame):
                 continue
 
             image_bytes = io.BytesIO(response.content)
+
             img = Image.open(image_bytes)
+            width, height = img.size
+            if 425 / width < 300 / height:
+                new_width = 425
+                new_height =  height * (425 / width)
+            else:
+                new_height = 300
+                new_width = width * (300 / height)
+
+            img = img.resize((int(new_width),int(new_height)))
             parent.img_ls.append(ImageTk.PhotoImage(img))
             tk.Button(self.inner_frame, image=parent.img_ls[i], text='img: ' + str(i), width=425, height=300,
                   bg='grey', fg='white').grid(column=0, row=i, pady=8, padx=50)
-            tk.Label(self.inner_frame, text='@' + row['category'], fg='white', bg='grey').grid(column=0,
+            tk.Label(self.inner_frame, text=row['category'], fg='white', bg='grey').grid(column=0,
                                                                                                 row=i,
                                                                                                 pady=8,
                                                                                                 padx=50,
