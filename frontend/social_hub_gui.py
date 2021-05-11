@@ -5,9 +5,12 @@ Created on Thu May  6 14:38:18 2021
 """
 
 import tkinter as tk
+
 from frontend.landing_page_gui import LandingPage
+from frontend.loading_message_gui import LoadingPage
 from frontend.main_page_gui import MainPage
 from frontend.account_page_gui import AccountPage
+
 import frontend.gui_controller as gc
 
 
@@ -32,7 +35,7 @@ class SocialHubApp(tk.Frame):
 
         # iterating through a tuple consisting
         # of the different page layouts
-        for F in (LandingPage, AccountPage, MainPage,):
+        for F in (LandingPage, LoadingPage, AccountPage, MainPage,):
             frame = F(container, self)
 
             # initializing frame of that object from
@@ -45,8 +48,9 @@ class SocialHubApp(tk.Frame):
         self.show_frame(LandingPage)
 
     def load_main(self):
-        for F in (LandingPage, AccountPage, MainPage,):
+        for F in (LandingPage, LoadingPage, AccountPage, MainPage,):
             frame = F(self.container, self)
+
 
             # initializing frame of that object from
             # startpage, page1, page2 respectively with

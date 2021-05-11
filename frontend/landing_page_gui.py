@@ -7,6 +7,7 @@ Created on Thu May  6 13:25:07 2021
 import tkinter as tk
 from PIL import ImageTk, Image
 from frontend.main_page_gui import MainPage
+from frontend.loading_message_gui import LoadingPage
 import frontend.gui_controller as gc
 import pandas as pd
 
@@ -73,6 +74,7 @@ class LoginFrame(tk.Frame):
             controller.show_frame(MainPage)
         else:
             print('scraping')
+            controller.show_frame(LoadingPage)
             scrape()
             print('done')
             controller.show_frame(MainPage) # change to dynamic

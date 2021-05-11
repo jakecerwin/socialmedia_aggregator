@@ -4,9 +4,7 @@ author Jake
 
 import pandas as pd
 import numpy as np
-import matplotlib
-matplotlib.use("TkAgg")
-from matplotlib import pyplot as plt
+
 
 from scrappers.pinterest import PinterestScrapper
 from scrappers.linkedin import LinkedinScrapper
@@ -14,6 +12,9 @@ from scrappers.instagram import InstagramScrapper
 from scrappers.weheartit import WeheartitScrapper
 
 def graph(instagram, weheartit):
+    import matplotlib
+    matplotlib.use("TkAgg")
+    from matplotlib import pyplot as plt
 
 
     user = instagram.groupby("category").mean()
@@ -25,7 +26,7 @@ def graph(instagram, weheartit):
 
     plt.xlabel('Number of Likes')
     plt.ylabel('Account')
-    plt.xticks(rotation=0)
+    plt.xticks(rotation=10)
     plt.savefig('data/graphs/instagram.png')
     plt.close()
 
@@ -35,7 +36,7 @@ def graph(instagram, weheartit):
     plt.title('Average WeHeartIt Likes per Search Term')
     plt.xlabel('Number of Likes')
     plt.ylabel('Search Term')
-    plt.xticks(rotation=0)
+    plt.xticks(rotation=10)
     plt.savefig('data/graphs/weheartit.png')
     plt.close()
 
@@ -103,4 +104,9 @@ def scrape():
     pinterest.close()
     weheartit.close()
     instagram.close()
-    #graph(dfs[2], dfs[3])
+
+    instagram = pd.read_csv('data/instagram.csv')
+    weheartit = pd.read_csv('data/weheartit.csv')
+
+    #graph(instagram, weheartit)
+

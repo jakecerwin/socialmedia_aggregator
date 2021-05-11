@@ -46,7 +46,7 @@ class InstagramScrapper:
 
                     display_url = post.json_dict['display_url']
                     caption = post.json_dict['edge_media_to_caption']['edges'][0]['node']
-                    category = 'instagram@' + handle
+                    category = '@' + handle
                     thumbnail = post.json_dict['thumbnail_resources'][0]['src']
                     likes = post.likes # post.json_dict['likes']
 

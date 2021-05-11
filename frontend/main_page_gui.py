@@ -6,7 +6,7 @@ Created on Thu May  6 15:32:15 2021
 
 import tkinter as tk
 from PIL import ImageTk, Image
-import io
+import io, time
 import requests
 import frontend.gui_controller as gc
 from run import scrape
@@ -102,8 +102,15 @@ class LeftFrame(tk.Frame):
         #print('account page')
         self.controller.show_frame(AccountPage)
 
-    def refresh(self, controller):
+    def refresh(self):
+        from frontend.loading_message_gui import LoadingPage
+        self.controller.show_frame(LoadingPage)
+
+        print('show')
+
         scrape()
+        gc.read_static() # generate new graphs
+
         self.controller.load_main()
 
 
@@ -131,10 +138,10 @@ class RightFrame(tk.Frame):
         parent.img_ls = []
         # populate the frame
         if static:
-            df = gc.read_static('data')
+            df = gc.read_static()
         else:
             scrape()
-            df = gc.read_static('data')
+            df = gc.read_static()
         df_shuffled = df.sample(frac=1).reset_index(drop=True)
 
 

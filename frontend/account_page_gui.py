@@ -130,9 +130,9 @@ class AccountFrame(tk.Frame):
         df = pd.DataFrame(wh_topics, columns=['topic'])
         df.to_csv('user_data/weheartit_topics.csv', index=False)
 
+        from frontend.loading_message_gui import LoadingPage
+        controller.show_frame(LoadingPage)
 
-
-        print('scraping')
         scrape()
 
         controller.load_main() # change to dynamic

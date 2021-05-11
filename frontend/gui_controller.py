@@ -26,13 +26,13 @@ def display_likes(platform_name):
     pass
 
 
-def read_static(dir='data'): # will replace on backend to negate csv reliance
+def read_static(): # will replace on backend to negate csv reliance
     #img_urls = pd.DataFrame(columns=['postid','likes','category','link','data'])
-    filenames = [dir+'/instagram.csv', dir+'/linkedin.csv', dir+'/pinterest.csv', dir+'/weheartit.csv']
+    filenames = ['data/instagram.csv','data/linkedin.csv', 'data/pinterest.csv', 'data/weheartit.csv']
     combined_df = pd.concat([pd.read_csv(f) for f in filenames])
 
-    instagram = pd.read_csv(dir+'/instagram.csv')
-    weheartit = pd.read_csv(dir+'/weheartit.csv')
+    instagram = pd.read_csv('data/instagram.csv')
+    weheartit = pd.read_csv('data/weheartit.csv')
 
     graph(instagram, weheartit)
 
